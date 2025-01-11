@@ -4,6 +4,11 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
 
-    <include file="v1.0.0/tables/changelog.xml" relativeToChangelogFile="true"/>
+    <changeSet id="add-tag-1.0.0" author="Roman">
+        <tagDatabase tag="v.1.0.0"/>
+    </changeSet>
+
+    <include file="usr_create.xml" relativeToChangelogFile="true"/>
+
 
 </databaseChangeLog>

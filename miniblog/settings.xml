@@ -2,31 +2,28 @@
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
 
-    <!-- Локальный репозиторий (опционально) -->
-    <!--<localRepository>/path/to/local/repository</localRepository>-->
 
-    <!-- Серверы для авторизации -->
     <servers>
         <server>
-            <id>TomcatServer</id> <!-- Этот ID используем в pom.xml -->
-            <username>admin</username> <!-- Пользователь Tomcat с ролью manager-script -->
-            <password>1234</password> <!-- Пароль пользователя -->
+            <id>TomcatServer</id>
+            <username>admin</username>
+            <password>1234</password>
         </server>
     </servers>
 
-    <!-- Профили -->
+
     <profiles>
         <profile>
-            <id>tomcat-deploy</id> <!-- Уникальный идентификатор профиля -->
+            <id>tomcat-deploy</id>
             <properties>
-                <!-- Настраиваемые свойства профиля -->
+
                 <tomcat.url>http://localhost:8081/manager/text</tomcat.url>
                 <tomcat.path>/myblog</tomcat.path>
             </properties>
         </profile>
     </profiles>
 
-    <!-- Активные профили -->
+
     <activeProfiles>
         <activeProfile>tomcat-deploy</activeProfile>
     </activeProfiles>
