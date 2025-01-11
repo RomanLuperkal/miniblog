@@ -30,7 +30,7 @@ public class UserController {
             UserResponseDto user = userService.loginUser(login, password);
             session.setAttribute("user", user);
             model.addAttribute("message", "Login successful!");
-            return "login";
+            return "redirect:/posts";
         } catch (Exception e) {
             model.addAttribute("error", "Неправильные имя пользователя или пароль");
             return "login";

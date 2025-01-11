@@ -9,6 +9,6 @@
     </changeSet>
 
     <include file="usr_create.xml" relativeToChangelogFile="true"/>
-
+    <include file="post_create.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>
