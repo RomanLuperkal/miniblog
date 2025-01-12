@@ -29,5 +29,5 @@ public class Post {
     private Long commentsCount = 0L;
 
     @Column("likes_count")
-    private Long likesCount = 0L;;
+    private Long likesCount = 0L;
 }
