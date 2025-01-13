@@ -15,7 +15,7 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface PostMapper {
 
-    //@Mapping(target = "image", source = "image", qualifiedByName = "getBytesFromMultipartFile")
+    @Mapping(target = "image", source = "image", qualifiedByName = "getBytesFromMultipartFile")
     Post postCreateDtoToPost(PostCreateDto postCreateDto);
 
     @Mapping(target = "image", source = "image", qualifiedByName = "bytesToBase64")

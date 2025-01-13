@@ -106,7 +106,7 @@
             </div>
             <div class="mb-3">
                 <label for="tag" class="form-label">Tags (comma separated)</label>
-                <input type="text" id="tag" name="tag" class="form-control" required>
+                <input type="text" id="tag" name="tag" class="form-control">
             </div>
             <div class="d-flex justify-content-end">
                 <button type="submit" class="btn btn-success">Save Post</button>
@@ -124,6 +124,7 @@
                  th:src="${post.image}"
                  alt="Post Image">
         </div>
+        <p th:text="${post.tag}">tag</p>
         <p>Likes: <span th:text="${post.likesCount}">0</span> | Comments: <span th:text="${post.commentsCount}">0</span></p>
     </div>
 </div>

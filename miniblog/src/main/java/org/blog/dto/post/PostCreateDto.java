@@ -10,7 +10,7 @@ public class PostCreateDto {
 
     private String postName;
 
-    //private MultipartFile image;
+    private MultipartFile image;
 
     private String text;
 

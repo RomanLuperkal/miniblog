@@ -15,7 +15,7 @@
                              deleteCascade="false"/>
             </column>
             <column name="post_name" type="VARCHAR">
-                <constraints nullable="false" unique="true"/>
+                <constraints nullable="false"/>
             </column>
             <column name="image" type="bytea">
                 <constraints nullable="false"/>
