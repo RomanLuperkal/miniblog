@@ -9,16 +9,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/posts")
 @RequiredArgsConstructor
 public class PostController {
 
     private final PostService postService;
-
+    //
     // Отображение страницы с постами
     @GetMapping
-    public String listPosts(Model model, HttpSession session) {
+    public String listPosts(Model model, HttpSession session, @RequestParam(required = false) List<String> tags) {
         UserResponseDto user = (UserResponseDto) session.getAttribute("user");
         if (user != null) {
             model.addAttribute("userName", user.getFirstName() + " " + user.getLastName());
@@ -26,8 +28,8 @@ public class PostController {
             model.addAttribute("userName", "Гость"); // Если пользователь не найден
         }
 
-        model.addAttribute("posts", postService.getPosts());
-        return "post-list";
+        model.addAttribute("posts", postService.getPosts(tags));
+        return "post-list-with-filtert";
     }
 
 

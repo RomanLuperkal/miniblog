@@ -28,7 +28,10 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostResponseDto> getPosts() {
+    public List<PostResponseDto> getPosts(List<String> tags) {
+        if (tags != null && !tags.isEmpty()) {
+            return postMapper.postListToPostResponseDtoList(postRepository.getPostsByTags(tags));
+        }
         return postMapper.postListToPostResponseDtoList(postRepository.findAll());
     }
 }

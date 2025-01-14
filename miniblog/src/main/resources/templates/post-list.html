@@ -87,6 +87,14 @@
     <!--<button class="add-post-btn" id="addPostButton">Add Post</button>-->
     <button th:if="${session.user != null}" class="add-post-btn" id="addPostButton">Add Post</button>
 
+    <!--Форма для тегов-->
+    <form th:action="@{/posts}" method="get" enctype="multipart/form-data">
+        <button class="add-post-btn" id="ApplyFilter">ApplyFilters</button>
+        <div class="mb-4">
+            <label for="postTagFilter" class="form-label">Tag</label>
+            <input type="text" id="postTagFilter" name="tags" class="form-control" th:name="tags">
+        </div>
+    </form>
 
     <!-- Форма для добавления поста -->
     <div class="card post-form p-4" id="postForm" style="display: none;">

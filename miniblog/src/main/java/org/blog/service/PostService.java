@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface PostService {
     void createPostCreate(PostCreateDto postCreateDto, HttpSession session);
-    List<PostResponseDto> getPosts();
+    List<PostResponseDto> getPosts(List<String> tags);
 }
