@@ -20,7 +20,8 @@ public class PostController {
     //
     // Отображение страницы с постами
     @GetMapping
-    public String listPosts(Model model, HttpSession session, @RequestParam(required = false) List<String> tags) {
+    public String listPosts(Model model, HttpSession session, @RequestParam(required = false) List<String> tags,
+                            @RequestParam(defaultValue = "10", name = "size") Long size, @RequestParam(defaultValue = "0") Long from) {
         UserResponseDto user = (UserResponseDto) session.getAttribute("user");
         if (user != null) {
             model.addAttribute("userName", user.getFirstName() + " " + user.getLastName());
@@ -29,7 +30,9 @@ public class PostController {
         }
 
         model.addAttribute("posts", postService.getPosts(tags));
-        return "post-list-with-filtert";
+        model.addAttribute("size", size);
+        session.setAttribute("from", from);
+        return "post-list";
     }
 
 

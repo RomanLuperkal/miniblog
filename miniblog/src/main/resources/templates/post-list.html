@@ -87,13 +87,40 @@
     <!--<button class="add-post-btn" id="addPostButton">Add Post</button>-->
     <button th:if="${session.user != null}" class="add-post-btn" id="addPostButton">Add Post</button>
 
+
+
     <!--Форма для тегов-->
-    <form th:action="@{/posts}" method="get" enctype="multipart/form-data">
+    <form id="filterForm" th:action="@{/posts}" method="get">
         <button class="add-post-btn" id="ApplyFilter">ApplyFilters</button>
         <div class="mb-4">
             <label for="postTagFilter" class="form-label">Tag</label>
-            <input type="text" id="postTagFilter" name="tags" class="form-control" th:name="tags">
+            <input type="text" id="postTagFilter" name="tags" class="form-control" th:value="${tags}">
         </div>
+        <div class="pagination-selector">
+            <label for="size" class="me-2">Posts per page:</label>
+            <select id="size" name="size" class="form-select">
+                <option th:value="10" th:selected="${size == 10}">10</option>
+                <option th:value="20" th:selected="${size == 20}">20</option>
+                <option th:value="50" th:selected="${size == 50}">50</option>
+            </select>
+        </div>
+        <!-- Скрытое поле для параметра from -->
+        <input type="hidden" id="from" name="from" th:value="${from}">
+
+        <!-- Кнопки навигации -->
+        <div class="d-flex justify-content-between mt-3">
+            <!-- Кнопка "Пред." для уменьшения значения 'from' -->
+            <button type="submit" id="prevButton" class="btn btn-primary"
+                    th:disabled="${session.from == 0}"
+                    name="from" th:value="${session.from - 1}">Пред.</button>
+
+            <!-- Кнопка "След." для увеличения значения 'from' -->
+            <button type="submit" id="nextButton" class="btn btn-primary"
+                    th:disabled="${posts.size() < size}"
+                    name="from" th:value="${session.from + 1}">След.</button>
+        </div>
+
+
     </form>
 
     <!-- Форма для добавления поста -->
@@ -145,6 +172,22 @@
         const form = document.getElementById('postForm');
         form.style.display = form.style.display === 'none' ? 'block' : 'none';
     });
+
+    function prevPage() {
+        // Получаем значение 'from' из атрибута data-from
+        let from = document.getElementById('prevButton').getAttribute('data-from');
+
+        // Преобразуем строку в число
+        from = parseInt(from);
+
+        if (from > 0) {
+            // Уменьшаем значение 'from' на 1
+            from--;
+
+            // Перенаправляем с новым значением параметра 'from'
+            window.location.href = window.location.pathname + "?from=" + from;
+        }
+    }
 </script>
 </body>
 </html>
