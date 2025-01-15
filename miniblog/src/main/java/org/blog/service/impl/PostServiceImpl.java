@@ -2,6 +2,7 @@ package org.blog.service.impl;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.blog.dto.post.ListPostResponseDto;
 import org.blog.dto.post.PostCreateDto;
 import org.blog.dto.post.PostResponseDto;
 import org.blog.dto.user.UserResponseDto;
@@ -9,7 +10,9 @@ import org.blog.mapper.PostMapper;
 import org.blog.model.Post;
 import org.blog.repository.PostRepository;
 import org.blog.service.PostService;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -28,10 +31,36 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostResponseDto> getPosts(List<String> tags) {
+    public ListPostResponseDto getPosts(List<String> tags, int from, int size) {
+        long count;
+        int offset = from * size;
+        List<PostResponseDto> postResponseDtos;
         if (tags != null && !tags.isEmpty()) {
-            return postMapper.postListToPostResponseDtoList(postRepository.getPostsByTags(tags));
+            count = postRepository.countPostByTags(String.join(",", tags));
+            postResponseDtos = postMapper
+                    .postListToPostResponseDtoList(postRepository.getPostsByTags(String.join(",", tags), size, offset));
+
+            return createListPostResponseDto(postResponseDtos, from, count);
         }
-        return postMapper.postListToPostResponseDtoList(postRepository.findAll());
+        count = postRepository.count();
+        postResponseDtos = postMapper
+                .postListToPostResponseDtoList(postRepository.getPost(size, offset));
+        return createListPostResponseDto(postResponseDtos, from, count);
+    }
+
+    private ListPostResponseDto createListPostResponseDto(List<PostResponseDto>  postResponseDtos, int from,
+                                                           long count) {
+        ListPostResponseDto listPostResponseDto = new ListPostResponseDto();
+        listPostResponseDto.setPosts(postResponseDtos);
+        listPostResponseDto.setNext(count > postResponseDtos.size());
+        listPostResponseDto.setPrev(from > 0);
+        return listPostResponseDto;
+    }
+
+    @Override
+    public PostResponseDto getPost(Long postId) {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                "Пост не найден"));
+        return postMapper.postToPostResponseDto(post);
     }
 }

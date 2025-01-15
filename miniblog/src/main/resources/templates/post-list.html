@@ -85,73 +85,88 @@
 <div class="post-feed-container">
     <!-- Кнопка "Add Post" -->
     <!--<button class="add-post-btn" id="addPostButton">Add Post</button>-->
-    <button th:if="${session.user != null}" class="add-post-btn" id="addPostButton">Add Post</button>
+
 
 
 
     <!--Форма для тегов-->
     <form id="filterForm" th:action="@{/posts}" method="get">
-        <button class="add-post-btn" id="ApplyFilter">ApplyFilters</button>
+        <button class="add-post-btn" id="ApplyFilter">Обновить страницу</button>
         <div class="mb-4">
             <label for="postTagFilter" class="form-label">Tag</label>
             <input type="text" id="postTagFilter" name="tags" class="form-control" th:value="${tags}">
         </div>
         <div class="pagination-selector">
-            <label for="size" class="me-2">Posts per page:</label>
+            <label for="size" class="me-2">Кол-во постов на странице:</label>
             <select id="size" name="size" class="form-select">
                 <option th:value="10" th:selected="${size == 10}">10</option>
                 <option th:value="20" th:selected="${size == 20}">20</option>
                 <option th:value="50" th:selected="${size == 50}">50</option>
             </select>
         </div>
-        <!-- Скрытое поле для параметра from -->
-        <input type="hidden" id="from" name="from" th:value="${from}">
 
-        <!-- Кнопки навигации -->
-        <div class="d-flex justify-content-between mt-3">
-            <!-- Кнопка "Пред." для уменьшения значения 'from' -->
-            <button type="submit" id="prevButton" class="btn btn-primary"
-                    th:disabled="${session.from == 0}"
-                    name="from" th:value="${session.from - 1}">Пред.</button>
-
-            <!-- Кнопка "След." для увеличения значения 'from' -->
-            <button type="submit" id="nextButton" class="btn btn-primary"
-                    th:disabled="${posts.size() < size}"
-                    name="from" th:value="${session.from + 1}">След.</button>
-        </div>
 
 
     </form>
 
+    <form th:action="@{/posts}" method="get">
+        <!-- Кнопки навигации -->
+        <div class="d-flex justify-content-between mt-4">
+            <!-- Кнопка "Пред." -->
+            <a th:classappend="${!hasPrev} ? 'disabled'"
+               th:if="${hasPrev}"
+               th:href="@{/posts(tags=${tags}, from=${from - 1}, size=${size})}"
+               class="btn btn-primary">Пред.</a>
+            <a th:classappend="${!hasPrev} ? 'disabled'"
+               th:unless="${hasPrev}"
+               class="btn btn-primary disabled">Пред.</a>
+
+            <!-- Кнопка "След." -->
+            <a th:classappend="${!hasNext} ? 'disabled'"
+               th:if="${hasNext}"
+               th:href="@{/posts(size=${size}, from=${from + 1}, tags=${tags})}"
+               class="btn btn-primary">След.</a>
+            <a th:classappend="${!hasNext} ? 'disabled'"
+               th:unless="${hasNext}"
+               class="btn btn-primary disabled">След.</a>
+        </div>
+    </form>
+
     <!-- Форма для добавления поста -->
+    <button th:if="${session.user != null}" class="add-post-btn" id="addPostButton">Добавить пост</button>
     <div class="card post-form p-4" id="postForm" style="display: none;">
-        <h3 class="text-center">Add New Post</h3>
+        <h3 class="text-center">Создание поста</h3>
         <form th:action="@{/posts/add}" method="post" enctype="multipart/form-data">
             <div class="mb-3">
-                <label for="postName" class="form-label">Post Name</label>
+                <label for="postName" class="form-label">имя</label>
                 <input type="text" id="postName" name="postName" class="form-control" required>
             </div>
             <div class="mb-3">
-                <label for="image" class="form-label">Image</label>
+                <label for="image" class="form-label">изображение</label>
                 <input type="file" id="image" name="image" class="form-control" accept="image/*" required>
             </div>
             <div class="mb-3">
-                <label for="text" class="form-label">Text</label>
+                <label for="text" class="form-label">текст</label>
                 <textarea id="text" name="text" class="form-control" rows="5" required></textarea>
             </div>
             <div class="mb-3">
-                <label for="tag" class="form-label">Tags (comma separated)</label>
+                <label for="tag" class="form-label">теги (через запятую)</label>
                 <input type="text" id="tag" name="tag" class="form-control">
             </div>
             <div class="d-flex justify-content-end">
-                <button type="submit" class="btn btn-success">Save Post</button>
+                <button type="submit" class="btn btn-success">создать</button>
             </div>
         </form>
     </div>
 
     <!-- Лента постов -->
+    <div th:if="${posts.isEmpty()}" class="alert alert-info">
+        Нет постов для отображения.
+    </div>
     <div th:each="post : ${posts}" class="post">
-        <h2 th:text="${post.postName}">Post Title</h2>
+        <h2>
+            <a th:href="@{/posts/{postId}(postId=${post.postId})}" th:text="${post.postName}">Post Title</a>
+        </h2>
         <p th:text="${post.text}">Post content goes here...</p>
         <div class="post-body">
             <!-- Если изображение есть, показываем его -->
@@ -160,7 +175,7 @@
                  alt="Post Image">
         </div>
         <p th:text="${post.tag}">tag</p>
-        <p>Likes: <span th:text="${post.likesCount}">0</span> | Comments: <span th:text="${post.commentsCount}">0</span></p>
+        <p>Нравится: <span th:text="${post.likesCount}">0</span> | Комментариев: <span th:text="${post.commentsCount}">0</span></p>
     </div>
 </div>
 
@@ -172,22 +187,6 @@
         const form = document.getElementById('postForm');
         form.style.display = form.style.display === 'none' ? 'block' : 'none';
     });
-
-    function prevPage() {
-        // Получаем значение 'from' из атрибута data-from
-        let from = document.getElementById('prevButton').getAttribute('data-from');
-
-        // Преобразуем строку в число
-        from = parseInt(from);
-
-        if (from > 0) {
-            // Уменьшаем значение 'from' на 1
-            from--;
-
-            // Перенаправляем с новым значением параметра 'from'
-            window.location.href = window.location.pathname + "?from=" + from;
-        }
-    }
 </script>
 </body>
 </html>

@@ -16,6 +16,7 @@ import java.util.List;
 public interface PostMapper {
 
     @Mapping(target = "image", source = "image", qualifiedByName = "getBytesFromMultipartFile")
+    @Mapping(target = "tag", source = "tag", qualifiedByName = "getListTagsInString")
     Post postCreateDtoToPost(PostCreateDto postCreateDto);
 
     @Mapping(target = "image", source = "image", qualifiedByName = "bytesToBase64")
@@ -34,5 +35,10 @@ public interface PostMapper {
     @Named("getBytesFromMultipartFile")
     default byte[] getBytesFromMultipartFile(MultipartFile multipartFile) throws IOException {
         return multipartFile.getBytes();
+    }
+
+    @Named("getListTagsInString")
+    default String getListTagsInString(String tag) {
+        return tag.replace(" ", "");
     }
 }
