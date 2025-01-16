@@ -19,13 +19,20 @@ public interface PostRepository extends CrudRepository<Post, Long> {
     List<Post> getPostsByTags(@Param("tags")String tags, @Param("size")int size,  @Param("offset")int offset);
 
     @Query("""
-            SELECT COUNT(*) FROM Post p WHERE p.tag LIKE CONCAT('%', :tags, '%')
+            SELECT COUNT(*) FROM (SELECT * FROM Post p WHERE p.tag LIKE CONCAT('%', :tags, '%')
+            LIMIT :size OFFSET :offset) as res
             """)
-    long countPostByTags(@Param("tags") String tags);
+    Long countPostByTags(@Param("tags") String tags, @Param("size")int size,  @Param("offset")int offset);
 
     @Query("""
             SELECT * FROM Post p
             LIMIT :size OFFSET :offset
             """)
     List<Post> getPost(@Param("size")int size,  @Param("offset")int offset);
+
+    @Query("""
+            SELECT COUNT(*) FROM (SELECT p.post_id FROM Post p
+            LIMIT :size OFFSET :offset) as res
+            """)
+    Long countPost(@Param("size")int size,  @Param("offset") int offset);
 }

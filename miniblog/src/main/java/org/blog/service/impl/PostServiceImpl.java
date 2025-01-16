@@ -36,13 +36,13 @@ public class PostServiceImpl implements PostService {
         int offset = from * size;
         List<PostResponseDto> postResponseDtos;
         if (tags != null && !tags.isEmpty()) {
-            count = postRepository.countPostByTags(String.join(",", tags));
+            count = postRepository.countPostByTags(String.join(",", tags), size + 1, offset);
             postResponseDtos = postMapper
                     .postListToPostResponseDtoList(postRepository.getPostsByTags(String.join(",", tags), size, offset));
 
             return createListPostResponseDto(postResponseDtos, from, count);
         }
-        count = postRepository.count();
+        count = postRepository.countPost(size + 1, offset);
         postResponseDtos = postMapper
                 .postListToPostResponseDtoList(postRepository.getPost(size, offset));
         return createListPostResponseDto(postResponseDtos, from, count);
@@ -62,5 +62,10 @@ public class PostServiceImpl implements PostService {
         Post post = postRepository.findById(postId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                 "Пост не найден"));
         return postMapper.postToPostResponseDto(post);
+    }
+
+    @Override
+    public void deletePost(Long postId) {
+        postRepository.deleteById(postId);
     }
 }

@@ -12,4 +12,5 @@ public interface PostService {
     void createPostCreate(PostCreateDto postCreateDto, HttpSession session);
     ListPostResponseDto getPosts(List<String> tags, int from, int size);
     PostResponseDto getPost(Long postId);
+    void deletePost(Long postId);
 }
