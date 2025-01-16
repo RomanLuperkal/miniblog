@@ -2,6 +2,9 @@ package org.blog.dto.post;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.blog.dto.comment.ResponseCommentDto;
+
+import java.util.Set;
 
 @Getter
 @Setter
@@ -14,4 +17,5 @@ public class PostResponseDto {
     private String tag;
     private Long commentsCount = 0L;
     private Long likesCount = 0L;
+    private Set<ResponseCommentDto> comments;
 }

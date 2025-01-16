@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.Base64;
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {CommentMapper.class})
 public interface PostMapper {
 
     @Mapping(target = "image", source = "image", qualifiedByName = "getBytesFromMultipartFile")

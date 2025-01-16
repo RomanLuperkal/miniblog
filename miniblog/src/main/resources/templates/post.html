@@ -81,6 +81,26 @@
         .btn-danger:hover {
             background-color: #c82333;
         }
+
+        .comments-section {
+            margin-top: 30px;
+        }
+
+        .comment {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #e9ecef;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+        }
+
+        .comment textarea {
+            width: 100%;
+            resize: none;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            padding: 10px;
+        }
     </style>
 </head>
 <body>
@@ -114,6 +134,56 @@
             <button th:if="${session.user.userId == post.getOwnerId()}" class="btn btn-warning me-2">Редактировать</button>
         </div>
     </div>
+
+    <!-- Секция комментариев -->
+    <div class="comments-section">
+        <h3>Комментарии</h3>
+
+        <!-- Список комментариев -->
+        <div th:each="comment : ${post.comments}" class="comment">
+            <div th:if="${session.user != null}">
+                <p th:text="${comment.text}"></p>
+                <!--<p th:text="${comment.text}" th:onclick="'enableEditing(' + ${comment.commentId} + ')'"></p>-->
+                <button class="btn btn-danger btn-sm" th:onclick="'deleteComment(' + ${comment.commentId} + ')'">Удалить</button>
+            </div>
+           <!-- <div th:if="${session.user != null}">
+                <textarea th:text="${comment.text}" th:onkeypress="'saveComment(event, ' + ${comment.commentId} + ')'"></textarea>
+            </div>-->
+        </div>
+
+        <!-- Форма добавления нового комментария -->
+        <div class="mt-4">
+            <h3>Добавить комментарий</h3>
+            <form th:action="@{/posts/{postId}/comments(postId=${post.postId})}" method="post">
+                <label for="commentText" class="form-label">Текст комментария</label>
+                <textarea id="commentText" name="text" rows="3" placeholder="Напишите комментарий..." class="form-control mb-3"></textarea>
+                <button type="submit" class="btn btn-primary">Добавить комментарий</button>
+            </form>
+        </div>
+    </div>
 </div>
+
+<script>
+    function enableEditing(commentId) {
+        const commentElement = document.querySelector(`[data-comment-id="${commentId}"]`);
+        if (commentElement) {
+            const textarea = commentElement.querySelector('textarea');
+            textarea.style.display = 'block';
+        }
+    }
+
+    function saveComment(event, commentId) {
+        if (event.ctrlKey && event.key === 'Enter') {
+            const textarea = event.target;
+            alert(`Сохраняем комментарий с ID ${commentId}: ${textarea.value}`);
+        }
+    }
+
+    function deleteComment(commentId) {
+        if (confirm('Вы уверены, что хотите удалить этот комментарий?')) {
+            alert(`Удаляем комментарий с ID ${commentId}`);
+        }
+    }
+</script>
 </body>
 </html>

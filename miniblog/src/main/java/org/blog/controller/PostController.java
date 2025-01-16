@@ -2,10 +2,12 @@ package org.blog.controller;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.blog.dto.comment.CreateCommentDto;
 import org.blog.dto.post.ListPostResponseDto;
 import org.blog.dto.post.PostCreateDto;
 import org.blog.dto.post.PostResponseDto;
 import org.blog.dto.user.UserResponseDto;
+import org.blog.service.CommentService;
 import org.blog.service.PostService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +21,7 @@ import java.util.List;
 public class PostController {
 
     private final PostService postService;
+    private final CommentService commentService;
     //
     // Отображение страницы с постами
     @GetMapping
@@ -67,5 +70,14 @@ public class PostController {
     public String deletePost(@PathVariable Long postId) {
         postService.deletePost(postId);
         return "redirect:/posts";
+    }
+
+    @PostMapping("{postId}/comments")
+    public String createComment(@PathVariable Long postId, HttpSession session,
+                                @ModelAttribute CreateCommentDto createCommentDto, Model model) {
+        UserResponseDto user = (UserResponseDto) session.getAttribute("user");
+        createCommentDto.setOwnerId(user.getUserId());
+        commentService.createComment(createCommentDto);
+        return "redirect:/posts/" + postId;
     }
 }
