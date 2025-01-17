@@ -3,15 +3,15 @@ package org.blog.controller;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.blog.dto.comment.CreateCommentDto;
-import org.blog.dto.comment.ResponseCommentDto;
+import org.blog.dto.comment.UpdateCommentDto;
 import org.blog.dto.post.ListPostResponseDto;
 import org.blog.dto.post.PostCreateDto;
 import org.blog.dto.post.PostResponseDto;
 import org.blog.dto.user.UserResponseDto;
-import org.blog.model.Comment;
 import org.blog.repository.CommentRepository;
 import org.blog.service.CommentService;
 import org.blog.service.PostService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +25,6 @@ public class PostController {
 
     private final PostService postService;
     private final CommentService commentService;
-    private final CommentRepository commentRepository;
     //
     // Отображение страницы с постами
     @GetMapping
@@ -67,7 +66,7 @@ public class PostController {
     public String getPost(@PathVariable Long postId, Model model, HttpSession session) {
         PostResponseDto post = postService.getPost(postId);
         model.addAttribute("post", post);
-        return "post2";
+        return "post";
     }
 
     @PostMapping(value = "{postId}", params = "_method=delete")
@@ -93,11 +92,10 @@ public class PostController {
         return "post"; // Возвращаем представление
     }
 
-    @PatchMapping("/{postId}/comments/{commentId}")
-    public String updateComment(ResponseCommentDto responseCommentDto, @PathVariable Long commentId, @PathVariable Long postId) {
-        Comment comment = commentRepository.findById(commentId).orElse(null);
-        comment.setText(responseCommentDto.getText());
-        commentRepository.save(comment);
-        return "post";
+    @PatchMapping("/comments/{commentId}")
+    @ResponseBody
+    public ResponseEntity<Void> updateComment(@RequestBody UpdateCommentDto updateCommentDto, @PathVariable Long commentId) {
+        commentService.updateComment(updateCommentDto, commentId);
+        return ResponseEntity.ok().build();
     }
 }

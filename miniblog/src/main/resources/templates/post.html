@@ -127,11 +127,13 @@
 
         <!-- Кнопки -->
         <div class="buttons">
-            <form th:action="@{/posts/{postId}(postId=${post.postId})}" method="post" th:if="${session.user.userId == post.getOwnerId()}">
+            <form th:action="@{/posts/{postId}(postId=${post.postId})}" method="post"
+                  th:if="${session.user.userId == post.getOwnerId()}">
                 <input type="hidden" name="_method" value="delete">
                 <button type="submit" class="btn btn-danger">Удалить</button>
             </form>
-            <button th:if="${session.user.userId == post.getOwnerId()}" class="btn btn-warning me-2">Редактировать</button>
+            <button th:if="${session.user.userId == post.getOwnerId()}" class="btn btn-warning me-2">Редактировать
+            </button>
         </div>
     </div>
 
@@ -140,50 +142,135 @@
         <h3>Комментарии</h3>
 
         <!-- Список комментариев -->
-        <div th:each="comment : ${post.comments}" class="comment">
-            <div th:if="${session.user != null}">
-                <p th:text="${comment.text}"></p>
-                <!--<p th:text="${comment.text}" th:onclick="'enableEditing(' + ${comment.commentId} + ')'"></p>-->
-                <button class="btn btn-danger btn-sm" th:onclick="'deleteComment(' + ${comment.commentId} + ')'">Удалить</button>
+        <div th:each="comment : ${post.comments}"
+             class="comment"
+             th:attr="data-comment-id=${comment.commentId},data-comment-owner-id=${comment.getOwnerId()},
+             data-session-user-id=${session.user.userId}">
+            <div>
+                <!-- Текст комментария -->
+                <p class="comment-text" th:text="${comment.text}"></p>
+
+                <!-- Поле редактирования -->
+                <textarea class="comment-edit form-control" style="display: none;"></textarea>
+
+                <!-- Кнопка удаления -->
+                <button class="btn btn-danger btn-sm"
+                        th:onclick="'deleteComment(' + ${comment.commentId} + ')'">
+                    Удалить
+                </button>
             </div>
-           <!-- <div th:if="${session.user != null}">
-                <textarea th:text="${comment.text}" th:onkeypress="'saveComment(event, ' + ${comment.commentId} + ')'"></textarea>
-            </div>-->
         </div>
 
-        <!-- Форма добавления нового комментария -->
-        <div class="mt-4">
-            <h3>Добавить комментарий</h3>
-            <form th:action="@{/posts/{postId}/comments(postId=${post.postId})}" method="post">
-                <label for="commentText" class="form-label">Текст комментария</label>
-                <textarea id="commentText" name="text" rows="3" placeholder="Напишите комментарий..." class="form-control mb-3"></textarea>
-                <button type="submit" class="btn btn-primary">Добавить комментарий</button>
-            </form>
-        </div>
+        <!-- <div th:if="${session.user != null}">
+             <textarea th:text="${comment.text}" th:onkeypress="'saveComment(event, ' + ${comment.commentId} + ')'"></textarea>
+         </div>-->
+    </div>
+
+    <!-- Форма добавления нового комментария -->
+    <div class="mt-4">
+        <h3>Добавить комментарий</h3>
+        <form th:action="@{/posts/{postId}/comments(postId=${post.postId})}" method="post">
+            <label for="commentText" class="form-label">Текст комментария</label>
+            <textarea id="commentText" name="text" rows="3" placeholder="Напишите комментарий..."
+                      class="form-control mb-3" required></textarea>
+            <button type="submit" class="btn btn-primary">Добавить комментарий</button>
+        </form>
     </div>
 </div>
 
+<!-- Скрипт с логикой переключения режимов и сохранения -->
 <script>
-    function enableEditing(commentId) {
-        const commentElement = document.querySelector(`[data-comment-id="${commentId}"]`);
-        if (commentElement) {
-            const textarea = commentElement.querySelector('textarea');
-            textarea.style.display = 'block';
-        }
-    }
+    let editingFlag = 0;
 
-    function saveComment(event, commentId) {
-        if (event.ctrlKey && event.key === 'Enter') {
-            const textarea = event.target;
-            alert(`Сохраняем комментарий с ID ${commentId}: ${textarea.value}`);
-        }
+    document.addEventListener('DOMContentLoaded', function () {
+        const comments = document.querySelectorAll('.comment');
+
+        comments.forEach(comment => {
+            const commentId = comment.getAttribute('data-comment-id');
+            const commentTextElement = comment.querySelector('.comment-text');
+            const commentEditElement = comment.querySelector('.comment-edit');
+
+            const postOwnerId = comment.getAttribute('data-comment-owner-id');
+            const sessionUserId = comment.getAttribute('data-session-user-id');
+
+            // Клик по тексту -> включаем режим редактирования
+            commentTextElement.addEventListener('click', () => {
+                console.log("Нажали")
+                console.log(postOwnerId)
+                console.log(sessionUserId)
+                if(postOwnerId === sessionUserId && editingFlag===0){
+                    commentEditElement.style.display = 'block';
+                    commentTextElement.style.display = 'none';
+                    commentEditElement.value = commentTextElement.textContent.trim();
+                    commentEditElement.focus();
+                    editingFlag = 1;
+                }
+            });
+
+            // Ctrl+Enter -> сохраняем
+            commentEditElement.addEventListener('keydown', (event) => {
+                if (event.ctrlKey && event.key === 'Enter') {
+                    event.preventDefault();
+                    const updatedText = commentEditElement.value.trim();
+
+                    if (!updatedText) {
+                        alert('Нельзя оставлять пустой комментарий!');
+                        return;
+                    }
+
+                    saveComment(0, commentId, updatedText)
+                        .then(() => {
+                            commentTextElement.textContent = updatedText;
+                            commentTextElement.style.display = 'block';
+                            commentEditElement.style.display = 'none';
+                        })
+                        .catch(error => {
+                            console.error('Ошибка при сохранении комментария:', error);
+                            alert('Не удалось сохранить комментарий!');
+                        });
+                }
+                editingFlag = 0;
+            });
+        });
+    });
+
+    /**
+     * Отправляет PATCH-запрос на сервер для обновления комментария.
+     * @param {number} postId - ID поста.
+     * @param {string} commentId - ID комментария.
+     * @param {string} newText - Новый текст комментария.
+     * @returns {Promise} Резолвится, когда сервер успешно обновит комментарий.
+     */
+    function saveComment(postId, commentId, newText) {
+        console.log("текст" + newText);
+        return fetch(`comments/${commentId}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                text: newText             // Главное — поле text, чтобы на сервере вызвать comment.setText(...)
+                // Если необходимо, добавьте ownerId или любые другие поля из ResponseCommentDto
+            })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    // Если сервер вернул ошибку (4xx или 5xx)
+                    return response.text().then(text => {
+                        throw new Error(`Ошибка при обновлении комментария: ${text}`);
+                    });
+                }
+                // Если всё ок, можно вернуть что-то (например, JSON) или просто зарезолвиться
+            });
     }
 
     function deleteComment(commentId) {
         if (confirm('Вы уверены, что хотите удалить этот комментарий?')) {
-            alert(`Удаляем комментарий с ID ${commentId}`);
+            console.log(`Удаляем комментарий с ID ${commentId}`);
+            // Здесь отправка запроса на сервер и обновление интерфейса
         }
     }
 </script>
+
 </body>
 </html>
