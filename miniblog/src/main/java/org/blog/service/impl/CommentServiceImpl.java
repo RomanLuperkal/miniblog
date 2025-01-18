@@ -28,7 +28,7 @@ public class CommentServiceImpl implements CommentService {
     public void updateComment(UpdateCommentDto updateCommentDto, Long commentId) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Комментария с id=" + commentId + " не существует"));
-        comment.setText(comment.getText());
+        comment.setText(updateCommentDto.getText());
         commentRepository.save(comment);
     }
 }
