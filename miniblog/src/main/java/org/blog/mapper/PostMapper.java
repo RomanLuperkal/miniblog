@@ -1,5 +1,6 @@
 package org.blog.mapper;
 
+import org.blog.dto.post.FullPostResponseDto;
 import org.blog.dto.post.PostCreateDto;
 import org.blog.dto.post.PostResponseDto;
 import org.blog.model.Post;
@@ -23,6 +24,9 @@ public interface PostMapper {
     PostResponseDto postToPostResponseDto(Post post);
 
     List<PostResponseDto> postListToPostResponseDtoList(Iterable<Post> posts);
+
+    @Mapping(target = "image", source = "image", qualifiedByName = "bytesToBase64")
+    FullPostResponseDto postToFullPostResponseDto(Post post);
 
     @Named("bytesToBase64")
     default String bytesToBase64(byte[] image) {

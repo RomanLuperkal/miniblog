@@ -2,6 +2,7 @@ package org.blog.service.impl;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.blog.dto.post.FullPostResponseDto;
 import org.blog.dto.post.ListPostResponseDto;
 import org.blog.dto.post.PostCreateDto;
 import org.blog.dto.post.PostResponseDto;
@@ -58,10 +59,10 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostResponseDto getPost(Long postId) {
-        Post post = postRepository.findById(postId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+    public FullPostResponseDto getPost(Long postId) {
+        Post post = postRepository.findPostWithComments(postId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                 "Пост не найден"));
-        return postMapper.postToPostResponseDto(post);
+        return postMapper.postToFullPostResponseDto(post);
     }
 
     @Override

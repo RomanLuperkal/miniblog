@@ -3,6 +3,7 @@ package org.blog.model;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.relational.core.mapping.Column;
 
 @Getter
@@ -16,4 +17,6 @@ public class Comment {
     @Column("post_id")
     private Long postId;
     private String text;
+    @Transient
+    private User owner;
 }

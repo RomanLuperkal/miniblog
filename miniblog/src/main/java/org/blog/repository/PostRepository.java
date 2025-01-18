@@ -10,7 +10,7 @@ import java.util.List;
 
 
 @Repository
-public interface PostRepository extends CrudRepository<Post, Long> {
+public interface PostRepository extends CrudRepository<Post, Long>, CustomPostRepository {
 
     @Query("""
             SELECT * FROM Post p WHERE p.tag LIKE CONCAT('%', :tags, '%')

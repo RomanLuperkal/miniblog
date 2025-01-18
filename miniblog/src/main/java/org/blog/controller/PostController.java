@@ -4,11 +4,10 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.blog.dto.comment.CreateCommentDto;
 import org.blog.dto.comment.UpdateCommentDto;
+import org.blog.dto.post.FullPostResponseDto;
 import org.blog.dto.post.ListPostResponseDto;
 import org.blog.dto.post.PostCreateDto;
-import org.blog.dto.post.PostResponseDto;
 import org.blog.dto.user.UserResponseDto;
-import org.blog.repository.CommentRepository;
 import org.blog.service.CommentService;
 import org.blog.service.PostService;
 import org.springframework.http.ResponseEntity;
@@ -64,7 +63,7 @@ public class PostController {
 
     @GetMapping("{postId}")
     public String getPost(@PathVariable Long postId, Model model, HttpSession session) {
-        PostResponseDto post = postService.getPost(postId);
+        FullPostResponseDto post = postService.getPost(postId);
         model.addAttribute("post", post);
         return "post";
     }
@@ -82,14 +81,6 @@ public class PostController {
         createCommentDto.setOwnerId(user.getUserId());
         commentService.createComment(createCommentDto);
         return "redirect:/posts/" + postId;
-    }
-
-    @GetMapping("/{postId}/comments/{commentId}")
-    public String getComment(@PathVariable(value = "postId", required = false) Long postId,
-                             @PathVariable("commentId") Long commentId,
-                             Model model) {
-
-        return "post"; // Возвращаем представление
     }
 
     @PatchMapping("/comments/{commentId}")

@@ -147,30 +147,26 @@
              th:attr="data-comment-id=${comment.commentId},data-comment-owner-id=${comment.getOwnerId()},
              data-session-user-id=${session.user.userId}">
             <div>
+                <!-- Имя автора -->
+                <p class="comment-author text-muted fw-bold mb-1" th:text="${comment.ownerFullName}">Имя автора</p>
+
                 <!-- Текст комментария -->
-                <p class="comment-text" th:text="${comment.text}"></p>
+                <p class="comment-text mb-2" th:text="${comment.text}">Текст комментария</p>
 
                 <!-- Поле редактирования -->
-                <textarea class="comment-edit form-control" style="display: none;"></textarea>
+                <textarea class="comment-edit form-control mb-2" style="display: none;"></textarea>
 
                 <!-- Кнопка удаления -->
-                <button class="btn btn-danger btn-sm"
-                        th:onclick="'deleteComment(' + ${comment.commentId} + ')'">
-                    Удалить
+                <button th:if="${session.user.userId == comment.ownerId}" class="btn btn-danger btn-sm"
+                        th:onclick="'deleteComment(' + ${comment.commentId} + ')'">Удалить
                 </button>
             </div>
         </div>
-
-        <!-- <div th:if="${session.user != null}">
-             <textarea th:text="${comment.text}" th:onkeypress="'saveComment(event, ' + ${comment.commentId} + ')'"></textarea>
-         </div>-->
     </div>
 
     <!-- Форма добавления нового комментария -->
-    <div class="mt-4">
-        <h3>Добавить комментарий</h3>
+    <div class="mt-4" th:if="${session.user != null}">
         <form th:action="@{/posts/{postId}/comments(postId=${post.postId})}" method="post">
-            <label for="commentText" class="form-label">Текст комментария</label>
             <textarea id="commentText" name="text" rows="3" placeholder="Напишите комментарий..."
                       class="form-control mb-3" required></textarea>
             <button type="submit" class="btn btn-primary">Добавить комментарий</button>
