@@ -89,4 +89,12 @@ public class PostController {
         commentService.updateComment(updateCommentDto, commentId);
         return ResponseEntity.ok().build();
     }
+
+    @DeleteMapping("/comments/{commentId}")
+    @ResponseBody
+    public ResponseEntity<Void> deleteComment(@PathVariable Long commentId) {
+        commentService.deleteComment(commentId);
+        return ResponseEntity.ok().build();
+    }
+
 }

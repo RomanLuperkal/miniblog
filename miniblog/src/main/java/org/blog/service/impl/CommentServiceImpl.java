@@ -31,4 +31,13 @@ public class CommentServiceImpl implements CommentService {
         comment.setText(updateCommentDto.getText());
         commentRepository.save(comment);
     }
+
+    @Override
+    public void deleteComment(Long commentId) {
+        if (commentRepository.existsById(commentId)) {
+            commentRepository.deleteById(commentId);
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Комментария с id=" + commentId + " не существует");
+        }
+    }
 }

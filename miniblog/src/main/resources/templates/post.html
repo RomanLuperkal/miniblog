@@ -263,7 +263,26 @@
     function deleteComment(commentId) {
         if (confirm('Вы уверены, что хотите удалить этот комментарий?')) {
             console.log(`Удаляем комментарий с ID ${commentId}`);
-            // Здесь отправка запроса на сервер и обновление интерфейса
+            const url = `comments/${commentId}`;
+
+            fetch(url, {
+                method: 'DELETE',
+            })
+                .then(response => {
+                    if (response.ok) {
+                        // Удаляем комментарий из DOM
+                        const commentElement = document.querySelector(`.comment[data-comment-id="${commentId}"]`);
+                        if (commentElement) {
+                            commentElement.remove();
+                            console.log(`Комментарий с ID ${commentId} успешно удален.`);
+                        }
+                    } else {
+                        console.error(`Ошибка при удалении комментария с ID ${commentId}: ${response.status}`);
+                    }
+                })
+                .catch(error => {
+                    console.error(`Произошла ошибка при удалении комментария с ID ${commentId}:`, error);
+                });
         }
     }
 </script>
