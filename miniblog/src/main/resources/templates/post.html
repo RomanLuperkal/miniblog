@@ -179,6 +179,11 @@
                 </form>
             </div>
         </div>
+        <button type="button" class="btn btn-primary"
+                id="likeButton"
+                th:onclick="'likePost(' + ${post.postId} + ')'">
+            Нравится
+        </button>
     </div>
 
     <!-- Секция комментариев -->
@@ -334,6 +339,35 @@
         const form = document.getElementById('updatePostForm');
         form.style.display = form.style.display === 'none' ? 'block' : 'none';
     });
+
+    /**
+     * Отправка запроса на лайк поста
+     * @param {number} postId - ID поста
+     */
+    function likePost(postId) {
+        const url = `${postId}/like`;
+        console.log(url);
+
+        fetch(url, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Не удалось поставить лайк.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert(`Посту понравилось ${data.message} человек(а).`);
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert('Не удалось поставить лайк.');
+            });
+    }
 </script>
 
 </body>
