@@ -8,6 +8,7 @@ import org.blog.dto.like.LikeResponseDto;
 import org.blog.dto.post.FullPostResponseDto;
 import org.blog.dto.post.ListPostResponseDto;
 import org.blog.dto.post.PostCreateDto;
+import org.blog.dto.post.UpdatePostDto;
 import org.blog.dto.user.UserResponseDto;
 import org.blog.service.CommentService;
 import org.blog.service.PostService;
@@ -30,13 +31,8 @@ public class PostController {
     public String listPosts(Model model, HttpSession session, @RequestParam(defaultValue = "") List<String> tags,
                             @RequestParam(defaultValue = "10", name = "size") int size,
                             @RequestParam(defaultValue = "0") int from) {
-        UserResponseDto user = (UserResponseDto) session.getAttribute("user");
-        if (user != null) {
-            model.addAttribute("userName", user.getFirstName() + " " + user.getLastName());
-        } else {
-            model.addAttribute("userName", "Гость"); // Если пользователь не найден
-        }
         ListPostResponseDto posts = postService.getPosts(tags, from, size);
+        setUserName(session, model);
         model.addAttribute("posts", posts.getPosts());
         model.addAttribute("size", size);
         model.addAttribute("from", from);
@@ -64,6 +60,7 @@ public class PostController {
     @GetMapping("{postId}")
     public String getPost(@PathVariable Long postId, Model model, HttpSession session) {
         FullPostResponseDto post = postService.getPost(postId);
+        setUserName(session, model);
         model.addAttribute("post", post);
         return "post";
     }
@@ -102,6 +99,22 @@ public class PostController {
     public ResponseEntity<LikeResponseDto> likePost(@PathVariable Long postId,  HttpSession session) {
         UserResponseDto user = (UserResponseDto) session.getAttribute("user");
         return ResponseEntity.ok(postService.likePost(postId, user.getUserId()));
+    }
+
+    @PostMapping(value = "{postId}", params = "_method=patch")
+    public String updatePost(@PathVariable Long postId, @ModelAttribute UpdatePostDto updatePostDto, Model model) {
+        FullPostResponseDto fullPostResponseDto = postService.updatePost(postId, updatePostDto);
+        model.addAttribute("post", fullPostResponseDto);
+        return "post";
+    }
+
+    private void setUserName(HttpSession session, Model model) {
+        UserResponseDto user = (UserResponseDto) session.getAttribute("user");
+        if (user != null) {
+            model.addAttribute("userName", user.getFirstName() + " " + user.getLastName());
+        } else {
+            model.addAttribute("userName", "Гость");
+        }
     }
 
 }

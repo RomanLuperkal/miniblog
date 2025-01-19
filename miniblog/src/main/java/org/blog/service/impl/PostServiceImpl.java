@@ -3,10 +3,7 @@ package org.blog.service.impl;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.blog.dto.like.LikeResponseDto;
-import org.blog.dto.post.FullPostResponseDto;
-import org.blog.dto.post.ListPostResponseDto;
-import org.blog.dto.post.PostCreateDto;
-import org.blog.dto.post.PostResponseDto;
+import org.blog.dto.post.*;
 import org.blog.dto.user.UserResponseDto;
 import org.blog.mapper.PostMapper;
 import org.blog.model.Post;
@@ -73,6 +70,14 @@ public class PostServiceImpl implements PostService {
     @Override
     public void deletePost(Long postId) {
         postRepository.deleteById(postId);
+    }
+
+    @Override
+    public FullPostResponseDto updatePost(Long postId, UpdatePostDto updatePostDto) {
+        Post post = postRepository.findPostWithComments(postId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                "Пост не найден"));
+        Post updatedPost = postRepository.save(postMapper.mapToProduct(post, updatePostDto));
+        return postMapper.postToFullPostResponseDto(updatedPost);
     }
 
     @Override
