@@ -3,9 +3,11 @@ package org.blog.mapper;
 import org.blog.dto.post.FullPostResponseDto;
 import org.blog.dto.post.PostCreateDto;
 import org.blog.dto.post.PostResponseDto;
+import org.blog.dto.post.UpdatePostDto;
 import org.blog.model.Post;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,6 +29,9 @@ public interface PostMapper {
 
     @Mapping(target = "image", source = "image", qualifiedByName = "bytesToBase64")
     FullPostResponseDto postToFullPostResponseDto(Post post);
+
+    @Mapping(target = "image", source = "image", qualifiedByName = "getBytesFromMultipartFile")
+    Post mapToProduct(@MappingTarget Post post, UpdatePostDto updatePost);
 
     @Named("bytesToBase64")
     default String bytesToBase64(byte[] image) {
