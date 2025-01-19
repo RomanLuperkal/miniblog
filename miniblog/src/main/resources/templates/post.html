@@ -285,6 +285,34 @@
                 });
         }
     }
+
+    /**
+     * Отправка запроса на лайк поста
+     * @param {number} postId - ID поста
+     */
+    function likePost(postId) {
+        const url = `/posts/${postId}/like`;
+
+        fetch(url, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Не удалось поставить лайк. Попробуйте снова.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert(`Посту понравилось ${data.likeCount} человек(а).`);
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert('Не удалось поставить лайк. Попробуйте снова.');
+            });
+    }
 </script>
 
 </body>

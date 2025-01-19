@@ -2,6 +2,7 @@ package org.blog.service.impl;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.blog.dto.like.LikeResponseDto;
 import org.blog.dto.post.FullPostResponseDto;
 import org.blog.dto.post.ListPostResponseDto;
 import org.blog.dto.post.PostCreateDto;
@@ -10,7 +11,9 @@ import org.blog.dto.user.UserResponseDto;
 import org.blog.mapper.PostMapper;
 import org.blog.model.Post;
 import org.blog.repository.PostRepository;
+import org.blog.service.LikeService;
 import org.blog.service.PostService;
+import org.blog.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -22,6 +25,8 @@ import java.util.List;
 public class PostServiceImpl implements PostService {
     private final PostMapper postMapper;
     private final PostRepository postRepository;
+    private final LikeService likeService;
+    private final UserService userService;
 
     @Override
     public void createPostCreate(PostCreateDto postCreateDto, HttpSession session) {
@@ -49,8 +54,8 @@ public class PostServiceImpl implements PostService {
         return createListPostResponseDto(postResponseDtos, from, count);
     }
 
-    private ListPostResponseDto createListPostResponseDto(List<PostResponseDto>  postResponseDtos, int from,
-                                                           long count) {
+    private ListPostResponseDto createListPostResponseDto(List<PostResponseDto> postResponseDtos, int from,
+                                                          long count) {
         ListPostResponseDto listPostResponseDto = new ListPostResponseDto();
         listPostResponseDto.setPosts(postResponseDtos);
         listPostResponseDto.setNext(count > postResponseDtos.size());
@@ -68,5 +73,13 @@ public class PostServiceImpl implements PostService {
     @Override
     public void deletePost(Long postId) {
         postRepository.deleteById(postId);
+    }
+
+    @Override
+    public LikeResponseDto likePost(Long postId, Long userId) {
+        if (userService.existUser(userId)) {
+            return likeService.likePost(postId, userId);
+        }
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Пользователь с id=" + userId + " не найден");
     }
 }

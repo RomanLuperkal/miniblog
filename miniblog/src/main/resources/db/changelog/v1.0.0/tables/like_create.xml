@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="create_table_like" author="Roman">
+        <createTable tableName="like">
+            <column name="post_id" type="bigint">
+                <constraints primaryKey="true" nullable="false"
+                             foreignKeyName="fk_post" referencedTableName="post"
+                             referencedColumnNames="post_id" deleteCascade="false"/>
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints primaryKey="true" nullable="false"
+                             foreignKeyName="fk_user" referencedTableName="usr"
+                             referencedColumnNames="user_id" deleteCascade="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

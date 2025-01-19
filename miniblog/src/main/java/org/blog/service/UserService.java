@@ -8,4 +8,6 @@ public interface UserService {
     void addUser(UserCreateDto user);
 
     UserResponseDto loginUser(String login, String password);
+
+    boolean existUser(Long userId);
 }

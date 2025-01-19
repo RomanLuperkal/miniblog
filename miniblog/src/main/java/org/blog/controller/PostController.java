@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.blog.dto.comment.CreateCommentDto;
 import org.blog.dto.comment.UpdateCommentDto;
+import org.blog.dto.like.LikeResponseDto;
 import org.blog.dto.post.FullPostResponseDto;
 import org.blog.dto.post.ListPostResponseDto;
 import org.blog.dto.post.PostCreateDto;
@@ -24,8 +25,7 @@ public class PostController {
 
     private final PostService postService;
     private final CommentService commentService;
-    //
-    // Отображение страницы с постами
+
     @GetMapping
     public String listPosts(Model model, HttpSession session, @RequestParam(defaultValue = "") List<String> tags,
                             @RequestParam(defaultValue = "10", name = "size") int size,
@@ -95,6 +95,13 @@ public class PostController {
     public ResponseEntity<Void> deleteComment(@PathVariable Long commentId) {
         commentService.deleteComment(commentId);
         return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("{postId}/like")
+    @ResponseBody
+    public ResponseEntity<LikeResponseDto> likePost(@PathVariable Long postId,  HttpSession session) {
+        UserResponseDto user = (UserResponseDto) session.getAttribute("user");
+        return ResponseEntity.ok(postService.likePost(postId, user.getUserId()));
     }
 
 }

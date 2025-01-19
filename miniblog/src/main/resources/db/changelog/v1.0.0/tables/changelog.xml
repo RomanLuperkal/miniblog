@@ -11,5 +11,6 @@
     <include file="usr_create.xml" relativeToChangelogFile="true"/>
     <include file="post_create.xml" relativeToChangelogFile="true"/>
     <include file="comment_create.xml" relativeToChangelogFile="true"/>
+    <include file="like_create.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>
