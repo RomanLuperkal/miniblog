@@ -11,6 +11,7 @@ import org.blog.dto.post.PostCreateDto;
 import org.blog.dto.post.UpdatePostDto;
 import org.blog.dto.user.UserResponseDto;
 import org.blog.service.CommentService;
+import org.blog.service.LikeService;
 import org.blog.service.PostService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -26,6 +27,7 @@ public class PostController {
 
     private final PostService postService;
     private final CommentService commentService;
+    private final LikeService likeService;
 
     @GetMapping
     public String listPosts(Model model, HttpSession session, @RequestParam(defaultValue = "") List<String> tags,
@@ -98,7 +100,7 @@ public class PostController {
     @ResponseBody
     public ResponseEntity<LikeResponseDto> likePost(@PathVariable Long postId,  HttpSession session) {
         UserResponseDto user = (UserResponseDto) session.getAttribute("user");
-        return ResponseEntity.ok(postService.likePost(postId, user.getUserId()));
+        return ResponseEntity.ok(likeService.likePost(postId, user.getUserId()));
     }
 
     @PostMapping(value = "{postId}", params = "_method=patch")
