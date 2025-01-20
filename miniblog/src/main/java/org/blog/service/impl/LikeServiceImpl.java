@@ -16,10 +16,7 @@ public class LikeServiceImpl implements LikeService {
 
     @Override
     public LikeResponseDto likePost(Long postId, Long userId) {
-        Like.LikeKey likeKey = new Like.LikeKey();
-        likeKey.setPostId(postId);
-        likeKey.setUserId(userId);
-        Optional<Like> likePost = likeRepository.findById(likeKey);
+        Optional<Like> likePost = likeRepository.findByLikeKey(userId, postId);
         LikeResponseDto likeResponseDto = new LikeResponseDto();
 
         if (likePost.isPresent()) {
@@ -29,7 +26,8 @@ public class LikeServiceImpl implements LikeService {
         }
 
         Like newLike = new Like();
-        newLike.setLikeKey(likeKey);
+        newLike.setUserId(userId);
+        newLike.setPostId(postId);
         likeRepository.save(newLike);
         likeResponseDto.setMessage("Вы лайкнули пост");
         return likeResponseDto;

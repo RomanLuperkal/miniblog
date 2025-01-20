@@ -7,7 +7,7 @@
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
     <changeSet id="create_table_like" author="Roman">
-        <createTable tableName="like">
+        <createTable tableName="likes">
             <column name="post_id" type="bigint">
                 <constraints primaryKey="true" nullable="false"
                              foreignKeyName="fk_post" referencedTableName="post"

@@ -361,7 +361,7 @@
                 return response.json();
             })
             .then(data => {
-                alert(`Посту понравилось ${data.message} человек(а).`);
+                alert(`${data.message}`);
             })
             .catch(error => {
                 console.error('Ошибка:', error);

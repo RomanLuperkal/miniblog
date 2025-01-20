@@ -1,10 +1,13 @@
 package org.blog.repository;
 
 import org.blog.model.Like;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public interface LikeRepository extends CrudRepository<Like, Like.LikeKey> {
+import java.util.Optional;
 
+@Repository
+public interface LikeRepository {
+     Optional<Like> findByLikeKey(Long userId, Long postId);
+     void save(Like like);
+     void delete(Like like);
 }
