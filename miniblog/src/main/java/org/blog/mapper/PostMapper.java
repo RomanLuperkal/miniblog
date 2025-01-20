@@ -5,6 +5,7 @@ import org.blog.dto.post.PostCreateDto;
 import org.blog.dto.post.PostResponseDto;
 import org.blog.dto.post.UpdatePostDto;
 import org.blog.model.Post;
+import org.blog.model.Tag;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -14,20 +15,24 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.List;
+import java.util.Set;
 
-@Mapper(componentModel = "spring", uses = {CommentMapper.class})
+@Mapper(componentModel = "spring", uses = {CommentMapper.class, TagMapper.class})
 public interface PostMapper {
 
     @Mapping(target = "image", source = "image", qualifiedByName = "getBytesFromMultipartFile")
-    @Mapping(target = "tag", source = "tag", qualifiedByName = "getListTagsInString")
     Post postCreateDtoToPost(PostCreateDto postCreateDto);
 
     @Mapping(target = "image", source = "image", qualifiedByName = "bytesToBase64")
+    @Mapping(target = "tags", source = "tags", qualifiedByName = "getStringTagsFromSet")
+    @Mapping(target = "commentsCount", expression = "java(post.getComments().size())")
     PostResponseDto postToPostResponseDto(Post post);
 
     List<PostResponseDto> postListToPostResponseDtoList(Iterable<Post> posts);
 
     @Mapping(target = "image", source = "image", qualifiedByName = "bytesToBase64")
+    @Mapping(target = "tags", source = "tags", qualifiedByName = "getStringTagsFromSet")
+    @Mapping(target = "commentsCount", expression = "java(post.getComments().size())")
     FullPostResponseDto postToFullPostResponseDto(Post post);
 
     @Mapping(target = "image", source = "image", qualifiedByName = "getBytesFromMultipartFile")
@@ -46,8 +51,9 @@ public interface PostMapper {
         return multipartFile.getBytes();
     }
 
-    @Named("getListTagsInString")
-    default String getListTagsInString(String tag) {
-        return tag.replace(" ", "");
+    @Named("getStringTagsFromSet")
+    default String getStringTagsFromSet(Set<Tag> tags) {
+        List<String> stringTags = tags.stream().map(Tag::getTagName).toList();
+        return String.join(",", stringTags);
     }
 }

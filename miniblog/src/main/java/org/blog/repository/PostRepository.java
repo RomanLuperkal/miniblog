@@ -13,19 +13,28 @@ import java.util.List;
 public interface PostRepository extends CrudRepository<Post, Long>, CustomPostRepository {
 
     @Query("""
-            SELECT * FROM Post p WHERE p.tag LIKE CONCAT('%', :tags, '%')
-            LIMIT :size OFFSET :offset
+            SELECT distinct (p.post_id), owner_id, post_name, image, text, comments_count, likes_count, tag_id, t.post_id, tag_name
+                  FROM Post p
+                           JOIN Tag t ON p.post_id = t.post_id
+                  WHERE t.tag_name IN (:tags)
+                  ORDER BY post_id DESC
+                  LIMIT :size OFFSET :offset
             """)
-    List<Post> getPostsByTags(@Param("tags")String tags, @Param("size")int size,  @Param("offset")int offset);
+    List<Post> getPostsByTags(@Param("tags")List<String> tags, @Param("size")int size,  @Param("offset")int offset);
 
     @Query("""
-            SELECT COUNT(*) FROM (SELECT * FROM Post p WHERE p.tag LIKE CONCAT('%', :tags, '%')
-            LIMIT :size OFFSET :offset) as res
+            SELECT COUNT(*)
+            FROM (SELECT distinct (p.post_id), owner_id, post_name, image, text, comments_count, likes_count, tag_id, t.post_id, tag_name
+                  FROM Post p
+                           JOIN Tag t ON p.post_id = t.post_id
+                  WHERE t.tag_name IN (:tags)
+                  LIMIT :size OFFSET :offset) as res;
             """)
-    Long countPostByTags(@Param("tags") String tags, @Param("size")int size,  @Param("offset")int offset);
+    Long countPostByTags(@Param("tags") List<String> tags, @Param("size")int size,  @Param("offset")int offset);
 
     @Query("""
             SELECT * FROM Post p
+            ORDER BY post_id DESC
             LIMIT :size OFFSET :offset
             """)
     List<Post> getPost(@Param("size")int size,  @Param("offset")int offset);

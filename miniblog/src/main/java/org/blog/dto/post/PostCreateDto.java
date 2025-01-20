@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Set;
+
 @Getter
 @Setter
 public class PostCreateDto {
@@ -14,5 +16,5 @@ public class PostCreateDto {
 
     private String text;
 
-    private String tag;
+    private Set<String> tag;
 }

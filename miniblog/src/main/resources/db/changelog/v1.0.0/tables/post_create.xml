@@ -23,10 +23,6 @@
             <column name="text" type="VARCHAR">
                 <constraints nullable="false"/>
             </column>
-            <column name="tag" type="varchar">
-                <constraints nullable="false"/>
-            </column>
-            <column name="comments_count" type="bigint" defaultValue="0"/>
             <column name="likes_count" type="bigint" defaultValue="0"/>
         </createTable>
     </changeSet>

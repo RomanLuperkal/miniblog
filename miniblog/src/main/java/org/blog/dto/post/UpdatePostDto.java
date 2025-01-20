@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Set;
+
 @Getter
 @Setter
 public class UpdatePostDto {
@@ -13,5 +15,5 @@ public class UpdatePostDto {
 
     private String text;
 
-    private String tag;
+    private Set<String> tag;
 }

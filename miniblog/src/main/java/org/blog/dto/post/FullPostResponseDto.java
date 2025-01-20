@@ -14,8 +14,8 @@ public class FullPostResponseDto {
     private String postName;
     private String image;
     private String text;
-    private String tag;
-    private Long commentsCount = 0L;
+    private String tags;
+    private int commentsCount = 0;
     private Long likesCount = 0L;
     private Set<FullCommentDtoResponse> comments;
 }

@@ -26,10 +26,11 @@ public class Post {
 
     private String text;
 
-    private String tag;
+    @MappedCollection(idColumn = "post_id")
+    private Set<Tag> tags;
 
     @Column("comments_count")
-    private Long commentsCount = 0L;
+    private int commentsCount = 0;
 
     @Column("likes_count")
     private Long likesCount = 0L;

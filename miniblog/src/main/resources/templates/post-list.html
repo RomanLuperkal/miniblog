@@ -174,7 +174,7 @@
                  th:src="${post.image}"
                  alt="Post Image">
         </div>
-        <p th:text="${post.tag}">tag</p>
+        <p th:text="${post.getTags}">tag</p>
         <p>Нравится: <span th:text="${post.likesCount}">0</span> | Комментариев: <span th:text="${post.commentsCount}">0</span></p>
     </div>
 </div>
