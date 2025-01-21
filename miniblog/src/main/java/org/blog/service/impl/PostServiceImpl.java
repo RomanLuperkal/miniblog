@@ -40,13 +40,13 @@ public class PostServiceImpl implements PostService {
         int offset = from * size;
         List<PostResponseDto> postResponseDtos;
         if (tags != null && !tags.isEmpty()) {
-            count = postRepository.countPostByTags(tags, size, offset);
+            count = postRepository.countPostByTags(tags, size + 1, offset);
             postResponseDtos = postMapper
                     .postListToPostResponseDtoList(postRepository.getPostsByTags(tags, size, offset));
 
             return createListPostResponseDto(postResponseDtos, from, count);
         }
-        count = postRepository.countPost(size, offset);
+        count = postRepository.countPost(size + 1, offset);
         postResponseDtos = postMapper
                 .postListToPostResponseDtoList(postRepository.getPost(size, offset));
         return createListPostResponseDto(postResponseDtos, from, count);

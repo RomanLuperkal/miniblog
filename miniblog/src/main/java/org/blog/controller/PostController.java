@@ -75,7 +75,7 @@ public class PostController {
 
     @PostMapping("{postId}/comments")
     public String createComment(@PathVariable Long postId, HttpSession session,
-                                @ModelAttribute CreateCommentDto createCommentDto, Model model) {
+                                @ModelAttribute CreateCommentDto createCommentDto) {
         UserResponseDto user = (UserResponseDto) session.getAttribute("user");
         createCommentDto.setOwnerId(user.getUserId());
         commentService.createComment(createCommentDto);
@@ -104,9 +104,11 @@ public class PostController {
     }
 
     @PostMapping(value = "{postId}", params = "_method=patch")
-    public String updatePost(@PathVariable Long postId, @ModelAttribute UpdatePostDto updatePostDto, Model model) {
+    public String updatePost(@PathVariable Long postId, @ModelAttribute UpdatePostDto updatePostDto, Model model,
+                             HttpSession session) {
         FullPostResponseDto fullPostResponseDto = postService.updatePost(postId, updatePostDto);
         model.addAttribute("post", fullPostResponseDto);
+        setUserName(session, model);
         return "post";
     }
 

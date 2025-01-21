@@ -16,27 +16,31 @@
         .header-container {
             background-color: #4682b4;
             color: white;
-            padding: 10px 20px;
+            padding: 15px 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: relative;
         }
 
         .header-container h1 {
-            margin: 0 auto; /* Заголовок "Posts" строго по центру */
-            font-size: 24px;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            margin: 0;
+            font-size: 28px;
         }
 
         .header-container .user-info {
-            font-size: 14px;
+            font-size: 16px;
+            text-align: right;
         }
 
         /* Кнопка "Добавить пост" */
         .add-post-btn {
-            margin: 20px auto;
             display: block;
-            width: 200px;
-            text-align: center;
+            width: 220px;
+            margin: 20px auto;
             padding: 10px;
             font-size: 16px;
             background-color: #007bff;
@@ -52,8 +56,12 @@
 
         /* Контейнер ленты постов */
         .post-feed-container {
-            max-width: 800px;
-            margin: 0 auto;
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         .post {
@@ -64,20 +72,91 @@
             padding: 15px;
         }
 
-        /* Тело поста */
-        .post-body img {
-            max-width: 100%; /* Ширина изображения ограничена контейнером поста */
-            height: auto;
-            display: block;
-            margin: 10px auto; /* Центрируем изображение */
-            border-radius: 5px;
+        .post h2 {
+            font-size: 20px;
+            color: #343a40;
+            margin-bottom: 10px;
         }
 
-        .post_text {
+        .post h2 a {
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        .post h2 a:hover {
+            text-decoration: underline;
+        }
+
+        .post .post_text {
+            color: #495057;
+            font-size: 14px;
+            margin-bottom: 15px;
             overflow: hidden;
             display: -webkit-box;
             -webkit-line-clamp: 3;
             -webkit-box-orient: vertical;
+        }
+
+        .post-body img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 10px auto;
+            border-radius: 5px;
+        }
+
+        .pagination-selector {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .pagination-selector label {
+            font-size: 14px;
+            margin-right: 10px;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+        }
+
+        .btn-primary.disabled {
+            background-color: #d6d6d6;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .alert-info {
+            text-align: center;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+            background-color: #e9f5ff;
+            color: #31708f;
+        }
+
+        /* Форма */
+        .post-form {
+            display: none;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .post-form h3 {
+            margin-bottom: 20px;
+            text-align: center;
+            color: #343a40;
+        }
+
+        .post-form .btn-success {
+            width: 100%;
         }
     </style>
 </head>

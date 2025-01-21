@@ -12,54 +12,110 @@
         }
 
         .container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 30px auto;
             background-color: #ffffff;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             border-radius: 10px;
             overflow: hidden;
-            padding: 20px;
+            padding: 20px 30px;
+        }
+
+        .header-container {
+            background-color: #4682b4;
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-container .user-info {
+            font-size: 16px;
+            text-align: right;
         }
 
         .post-content h1 {
-            font-size: 28px;
+            font-size: 32px;
             color: #343a40;
             font-weight: bold;
             margin-bottom: 20px;
+            text-align: center;
         }
 
         .post-content img {
             display: block;
             max-width: 100%;
             height: auto;
-            margin: 20px 0;
+            margin: 20px auto;
             border-radius: 10px;
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
         }
 
         .post-content #postText {
-            font-size: 16px;
+            font-size: 18px;
             color: #495057;
-            line-height: 1.6;
+            line-height: 1.8;
             margin-top: 20px;
+            text-align: justify;
         }
 
-        .post-content strong {
-            color: #495057;
+        .tags {
+            margin-top: 20px;
             font-size: 14px;
-        }
-
-        .post-content .tags {
             color: #6c757d;
-            font-size: 14px;
         }
 
         .buttons {
             margin-top: 30px;
+            text-align: center;
         }
 
         .buttons .btn {
             margin-right: 10px;
+            margin-top: 5px;
+        }
+
+        .comments-section {
+            margin-top: 40px;
+        }
+
+        .comments-section h3 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #343a40;
+        }
+
+        .comment {
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            border: 1px solid #e9ecef;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+        }
+
+        .comment-author {
+            font-size: 14px;
+            color: #6c757d;
+            margin-bottom: 5px;
+        }
+
+        .comment-text {
+            font-size: 16px;
+            color: #495057;
+            line-height: 1.6;
+        }
+
+        .comment-edit {
+            width: 100%;
+            resize: none;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            padding: 10px;
+        }
+
+        .add-comment-form textarea {
+            resize: none;
         }
 
         .btn-warning {
@@ -82,39 +138,8 @@
             background-color: #c82333;
         }
 
-        .comments-section {
-            margin-top: 30px;
-        }
-
-        .comment {
-            margin-bottom: 15px;
-            padding: 10px;
-            border: 1px solid #e9ecef;
-            border-radius: 5px;
-            background-color: #f8f9fa;
-        }
-
-        .comment textarea {
-            width: 100%;
-            resize: none;
-            border: 1px solid #ced4da;
-            border-radius: 5px;
-            padding: 10px;
-        }
-
-        .header-container {
-            background-color: #4682b4;
-            color: white;
-            padding: 10px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .header-container .user-info {
-            font-size: 16px;
-            margin-left: auto; /* Отодвигает элемент вправо */
-            text-align: right; /* Выравнивает текст внутри элемента по правому краю */
+        .post_text {
+            word-wrap: break-word;
         }
     </style>
 </head>
@@ -136,7 +161,7 @@
         <img th:if="${post.image != null}" th:src="${post.image}" alt="Post Image" class="img-fluid rounded">
 
         <!-- Текст поста -->
-        <div id="postText">
+        <div id="postText" class="post_text">
             <p th:utext="${#strings.unescapeJava(#strings.replace(#strings.escapeJava(post.text),'\n','&lt;br /&gt;'))}">
                 Текст поста...
             </p>
