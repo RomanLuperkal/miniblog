@@ -72,6 +72,13 @@
             margin: 10px auto; /* Центрируем изображение */
             border-radius: 5px;
         }
+
+        .post_text {
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+        }
     </style>
 </head>
 <body>
@@ -167,7 +174,7 @@
         <h2>
             <a th:href="@{/posts/{postId}(postId=${post.postId})}" th:text="${post.postName}">Post Title</a>
         </h2>
-        <p th:text="${post.text}">Post content goes here...</p>
+        <p th:text="${post.text}" class="post_text">Post content goes here...</p>
         <div class="post-body">
             <!-- Если изображение есть, показываем его -->
             <img th:if="${post.image != null}"

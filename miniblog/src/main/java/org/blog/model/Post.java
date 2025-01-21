@@ -4,6 +4,7 @@ package org.blog.model;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.MappedCollection;
 
@@ -29,7 +30,7 @@ public class Post {
     @MappedCollection(idColumn = "post_id")
     private Set<Tag> tags;
 
-    @Column("comments_count")
+    @Transient
     private int commentsCount = 0;
 
     @Column("likes_count")
