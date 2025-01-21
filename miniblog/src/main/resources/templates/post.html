@@ -121,6 +121,10 @@
 <body>
 <div class="header-container">
     <div class="user-info">Вы вошли как: <span th:text="${userName}">Имя Фамилия</span></div>
+    <form th:action="@{/logout}" method="get"
+          th:if="${session.user != null}">
+        <button type="submit" class="btn btn-success">Выход</button>
+    </form>
 </div>
 
 <div class="container">
@@ -147,12 +151,12 @@
         <!-- Кнопки -->
         <div class="buttons">
             <form th:action="@{/posts/{postId}(postId=${post.postId})}" method="post"
-                  th:if="${session.user.userId == post.getOwnerId()}">
+                  th:if="${session.user != null and session.user.userId == post.getOwnerId()}">
                 <input type="hidden" name="_method" value="delete">
                 <button type="submit" class="btn btn-danger">Удалить</button>
             </form>
 
-            <button th:if="${session.user.userId == post.getOwnerId()}" class="btn btn-warning me-2" id="updatePostButton">Редактировать</button>
+            <button th:if="${session.user != null and session.user.userId == post.getOwnerId()}" class="btn btn-warning me-2" id="updatePostButton">Редактировать</button>
             <div class="card post-form p-4" id="updatePostForm" style="display: none;">
                 <h3 class="text-center">Редактирование поста</h3>
                 <form th:action="@{/posts/{postId}(postId=${post.postId})}" method="post" enctype="multipart/form-data">
@@ -181,9 +185,13 @@
         </div>
         <button type="button" class="btn btn-primary"
                 id="likeButton"
+                th:if="${session.user != null}"
                 th:onclick="'likePost(' + ${post.postId} + ')'">
             Нравится
         </button>
+        <form th:action="@{/posts}" method="get">
+            <button type="submit" class="btn btn-success">Назад</button>
+        </form>
     </div>
 
     <!-- Секция комментариев -->
@@ -193,20 +201,23 @@
         <!-- Список комментариев -->
         <div th:each="comment : ${post.comments}"
              class="comment"
-             th:attr="data-comment-id=${comment.commentId},data-comment-owner-id=${comment.getOwnerId()},
-             data-session-user-id=${session.user.userId}">
+             th:attr="data-comment-id=${comment.commentId}">
             <div>
                 <!-- Имя автора -->
                 <p class="comment-author text-muted fw-bold mb-1" th:text="${comment.ownerFullName}">Имя автора</p>
 
                 <!-- Текст комментария -->
-                <p class="comment-text mb-2" th:text="${comment.text}">Текст комментария</p>
+                <p class="comment-text mb-2"
+                   th:text="${comment.text}"
+                   th:onclick="${session.user != null} ? 'updateComment(' + ${comment.commentId} + ',' + ${comment.ownerId} + ',' + ${session.user.userId} + ')' : ''">
+                    Текст комментария
+                </p>
 
                 <!-- Поле редактирования -->
                 <textarea class="comment-edit form-control mb-2" style="display: none;"></textarea>
 
                 <!-- Кнопка удаления -->
-                <button th:if="${session.user.userId == comment.ownerId}" class="btn btn-danger btn-sm"
+                <button th:if="${session.user != null and session.user.userId == comment.ownerId}" class="btn btn-danger btn-sm"
                         th:onclick="'deleteComment(' + ${comment.commentId} + ')'">Удалить
                 </button>
             </div>
@@ -225,60 +236,6 @@
 
 <!-- Скрипт с логикой переключения режимов и сохранения -->
 <script>
-    let editingFlag = 0;
-
-    document.addEventListener('DOMContentLoaded', function () {
-        const comments = document.querySelectorAll('.comment');
-
-        comments.forEach(comment => {
-            const commentId = comment.getAttribute('data-comment-id');
-            const commentTextElement = comment.querySelector('.comment-text');
-            const commentEditElement = comment.querySelector('.comment-edit');
-
-            const postOwnerId = comment.getAttribute('data-comment-owner-id');
-            const sessionUserId = comment.getAttribute('data-session-user-id');
-
-            // Клик по тексту -> включаем режим редактирования
-            commentTextElement.addEventListener('click', () => {
-                console.log("Нажали")
-                console.log(postOwnerId)
-                console.log(sessionUserId)
-                if(postOwnerId === sessionUserId && editingFlag===0){
-                    commentEditElement.style.display = 'block';
-                    commentTextElement.style.display = 'none';
-                    commentEditElement.value = commentTextElement.textContent.trim();
-                    commentEditElement.focus();
-                    editingFlag = 1;
-                }
-            });
-
-            // Ctrl+Enter -> сохраняем
-            commentEditElement.addEventListener('keydown', (event) => {
-                if (event.ctrlKey && event.key === 'Enter') {
-                    event.preventDefault();
-                    const updatedText = commentEditElement.value.trim();
-
-                    if (!updatedText) {
-                        alert('Нельзя оставлять пустой комментарий!');
-                        return;
-                    }
-
-                    saveComment(0, commentId, updatedText)
-                        .then(() => {
-                            commentTextElement.textContent = updatedText;
-                            commentTextElement.style.display = 'block';
-                            commentEditElement.style.display = 'none';
-                        })
-                        .catch(error => {
-                            console.error('Ошибка при сохранении комментария:', error);
-                            alert('Не удалось сохранить комментарий!');
-                        });
-                }
-                editingFlag = 0;
-            });
-        });
-    });
-
     /**
      * Отправляет PATCH-запрос на сервер для обновления комментария.
      * @param {number} postId - ID поста.
@@ -367,6 +324,53 @@
                 console.error('Ошибка:', error);
                 alert('Не удалось поставить лайк.');
             });
+    }
+
+    function updateComment(commentId, postOwnerId, sessionUserId) {
+        let editingFlag = 0;
+        const comment = document.querySelector(`.comment[data-comment-id="${commentId}"]`)
+        const commentTextElement = comment.querySelector('.comment-text');
+        const commentEditElement = comment.querySelector('.comment-edit');
+        console.log(commentTextElement);
+        console.log(commentEditElement);
+
+        commentTextElement.addEventListener('click', () => {
+            console.log("Нажали")
+            console.log(postOwnerId)
+            console.log(sessionUserId)
+            if(postOwnerId === sessionUserId && editingFlag===0){
+                commentEditElement.style.display = 'block';
+                commentTextElement.style.display = 'none';
+                commentEditElement.value = commentTextElement.textContent.trim();
+                commentEditElement.focus();
+                editingFlag = 1;
+            }
+        });
+
+        // Ctrl+Enter -> сохраняем
+        commentEditElement.addEventListener('keydown', (event) => {
+            if (event.ctrlKey && event.key === 'Enter') {
+                event.preventDefault();
+                const updatedText = commentEditElement.value.trim();
+
+                if (!updatedText) {
+                    alert('Нельзя оставлять пустой комментарий!');
+                    return;
+                }
+
+                saveComment(0, commentId, updatedText)
+                    .then(() => {
+                        commentTextElement.textContent = updatedText;
+                        commentTextElement.style.display = 'block';
+                        commentEditElement.style.display = 'none';
+                    })
+                    .catch(error => {
+                        console.error('Ошибка при сохранении комментария:', error);
+                        alert('Не удалось сохранить комментарий!');
+                    });
+            }
+            editingFlag = 0;
+        });
     }
 </script>
 

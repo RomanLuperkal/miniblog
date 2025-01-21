@@ -86,15 +86,14 @@
 <div class="header-container">
     <h1>Posts</h1>
     <div class="user-info">Вы вошли как: <span th:text="${userName}">Имя Фамилия</span></div>
+    <form th:action="@{/logout}" method="get"
+          th:if="${session.user != null}">
+        <button type="submit" class="btn btn-success">Выход</button>
+    </form>
 </div>
 
 <!-- Основной контейнер -->
 <div class="post-feed-container">
-    <!-- Кнопка "Add Post" -->
-    <!--<button class="add-post-btn" id="addPostButton">Add Post</button>-->
-
-
-
 
     <!--Форма для тегов-->
     <form id="filterForm" th:action="@{/posts}" method="get">
