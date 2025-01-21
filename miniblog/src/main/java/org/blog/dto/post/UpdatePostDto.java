@@ -15,5 +15,5 @@ public class UpdatePostDto {
 
     private String text;
 
-    private Set<String> tag;
+    private Set<String> tags;
 }

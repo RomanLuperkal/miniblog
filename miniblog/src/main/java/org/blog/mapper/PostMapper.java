@@ -21,6 +21,7 @@ import java.util.Set;
 public interface PostMapper {
 
     @Mapping(target = "image", source = "image", qualifiedByName = "getBytesFromMultipartFile")
+    @Mapping(target = "tags", source = "tags", qualifiedByName = "setStringToSetTags")
     Post postCreateDtoToPost(PostCreateDto postCreateDto);
 
     @Mapping(target = "image", source = "image", qualifiedByName = "bytesToBase64")

@@ -56,7 +56,9 @@ public class PostServiceImpl implements PostService {
     public FullPostResponseDto getPost(Long postId) {
         Post post = postRepository.findPostWithComments(postId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                 "Пост не найден"));
-        return postMapper.postToFullPostResponseDto(post);
+        FullPostResponseDto fullPostResponseDto = postMapper.postToFullPostResponseDto(post);
+        fullPostResponseDto.setCommentsCount(post.getComments().size());
+        return fullPostResponseDto;
     }
 
     @Override
@@ -72,7 +74,7 @@ public class PostServiceImpl implements PostService {
         if (!post.getTags().isEmpty()) {
             List<Long> tagIds = post.getTags().stream().map(Tag::getTagId).toList();
             tagService.deleteTags(tagIds);
-            post.setTags(tagMapper.setStringToSetTags(updatePostDto.getTag()));
+            post.setTags(tagMapper.setStringToSetTags(updatePostDto.getTags()));
             postRepository.save(post);
         }
         Post updatedPost = postRepository.save(postMapper.mapToProduct(post, updatePostDto));

@@ -16,5 +16,5 @@ public class PostCreateDto {
 
     private String text;
 
-    private Set<String> tag;
+    private Set<String> tags;
 }

@@ -31,7 +31,6 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
                    p.text,
                    t.tag_name,
                    t.tag_id,
-                   comments_count,
                    likes_count,
                    comment_id,
                    c.owner_id as owner_comment_id,
@@ -65,7 +64,6 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
                     post.setPostName(rs.getString("post_name"));
                     post.setImage(rs.getBytes("image"));
                     post.setText(rs.getString("text"));
-                    post.setCommentsCount(rs.getInt("comments_count"));
                     post.setLikesCount(rs.getLong("likes_count"));
                 }
 
