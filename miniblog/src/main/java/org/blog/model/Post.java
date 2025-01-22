@@ -8,6 +8,7 @@ import org.springframework.data.annotation.Transient;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.MappedCollection;
 
+import java.util.Objects;
 import java.util.Set;
 
 @Getter
@@ -38,4 +39,16 @@ public class Post {
 
     @MappedCollection(idColumn = "post_id")
     private Set<Comment> comments;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Post post)) return false;
+        return Objects.equals(postId, post.postId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(postId);
+    }
 }
