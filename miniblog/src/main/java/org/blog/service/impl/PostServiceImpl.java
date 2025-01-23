@@ -27,7 +27,7 @@ public class PostServiceImpl implements PostService {
     private final TagMapper tagMapper;
 
     @Override
-    public void createPostCreate(PostCreateDto postCreateDto, HttpSession session) {
+    public void createPost(PostCreateDto postCreateDto, HttpSession session) {
         Post newPost = postMapper.postCreateDtoToPost(postCreateDto);
         UserResponseDto user = (UserResponseDto) session.getAttribute("user");
         newPost.setOwnerId(user.getUserId());
@@ -77,7 +77,7 @@ public class PostServiceImpl implements PostService {
             post.setTags(tagMapper.setStringToSetTags(updatePostDto.getTags()));
             postRepository.save(post);
         }
-        Post updatedPost = postRepository.save(postMapper.mapToProduct(post, updatePostDto));
+        Post updatedPost = postRepository.save(postMapper.mapToPost(post, updatePostDto));
         return postMapper.postToFullPostResponseDto(updatedPost);
     }
 

@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface PostService {
 
-    void createPostCreate(PostCreateDto postCreateDto, HttpSession session);
+    void createPost(PostCreateDto postCreateDto, HttpSession session);
 
     ListPostResponseDto getPosts(List<String> tags, int from, int size);
 

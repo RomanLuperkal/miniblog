@@ -51,7 +51,7 @@ public class PostController {
             HttpSession session,
             Model model) {
         try {
-            postService.createPostCreate(postCreateDto, session);
+            postService.createPost(postCreateDto, session);
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
             return "post-list";

@@ -37,7 +37,7 @@ public interface PostMapper {
     FullPostResponseDto postToFullPostResponseDto(Post post);
 
     @Mapping(target = "image", source = "image", qualifiedByName = "getBytesFromMultipartFile")
-    Post mapToProduct(@MappingTarget Post post, UpdatePostDto updatePost);
+    Post mapToPost(@MappingTarget Post post, UpdatePostDto updatePost);
 
     @Named("bytesToBase64")
     default String bytesToBase64(byte[] image) {

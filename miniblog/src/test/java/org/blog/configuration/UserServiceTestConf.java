@@ -1,6 +1,7 @@
 package org.blog.configuration;
 
 import org.blog.mapper.UserMapper;
+import org.blog.mapper.UserMapperImpl;
 import org.blog.repository.UserRepository;
 import org.blog.service.UserService;
 import org.blog.service.impl.UserServiceImpl;
@@ -18,7 +19,7 @@ public class UserServiceTestConf {
 
     @Bean
     public UserMapper getUserMapper() {
-        return mock(UserMapper.class);
+        return new UserMapperImpl();
     }
 
     @Bean
