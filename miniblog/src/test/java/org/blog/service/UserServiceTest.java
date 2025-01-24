@@ -7,12 +7,10 @@ import org.blog.model.User;
 import org.blog.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
@@ -21,8 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ActiveProfiles("test")
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = UserServiceTestConf.class)
+@SpringJUnitConfig(classes = UserServiceTestConf.class)
 public class UserServiceTest {
 
     @Autowired

@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.blog.dto.post.*;
 import org.blog.dto.user.UserResponseDto;
 import org.blog.mapper.PostMapper;
-import org.blog.mapper.TagMapper;
 import org.blog.model.Post;
 import org.blog.model.Tag;
 import org.blog.repository.PostRepository;
@@ -24,7 +23,6 @@ public class PostServiceImpl implements PostService {
     private final PostMapper postMapper;
     private final PostRepository postRepository;
     private final TagService tagService;
-    private final TagMapper tagMapper;
 
     @Override
     public void createPost(PostCreateDto postCreateDto, HttpSession session) {
@@ -74,8 +72,6 @@ public class PostServiceImpl implements PostService {
         if (!post.getTags().isEmpty()) {
             List<Long> tagIds = post.getTags().stream().map(Tag::getTagId).toList();
             tagService.deleteTags(tagIds);
-            post.setTags(tagMapper.setStringToSetTags(updatePostDto.getTags()));
-            postRepository.save(post);
         }
         Post updatedPost = postRepository.save(postMapper.mapToPost(post, updatePostDto));
         return postMapper.postToFullPostResponseDto(updatedPost);

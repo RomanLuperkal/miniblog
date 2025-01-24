@@ -9,13 +9,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 
 @Configuration
 public class PostServiceTestConf {
 
     @Bean
     public PostMapper getPostMapper() {
-        return new PostMapperImpl();
+        return spy(new PostMapperImpl());
     }
 
     @Bean
@@ -39,8 +40,7 @@ public class PostServiceTestConf {
     }
 
     @Bean
-    public PostService getPostService(PostMapper postMapper, TagService tagService, PostRepository postRepository,
-                                      TagMapper tagMapper) {
-        return new PostServiceImpl(postMapper, postRepository, tagService, tagMapper);
+    public PostService getPostService(PostMapper postMapper, TagService tagService, PostRepository postRepository) {
+        return new PostServiceImpl(postMapper, postRepository, tagService);
     }
 }

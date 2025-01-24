@@ -38,7 +38,7 @@ public interface PostRepository extends CrudRepository<Post, Long>, CustomPostRe
             ORDER BY post_id DESC
             LIMIT :size OFFSET :offset
             """)
-    List<Post> getPost(@Param("size")int size,  @Param("offset")int offset);
+    Set<Post> getPost(@Param("size")int size,  @Param("offset")int offset);
 
     @Query("""
             SELECT COUNT(*) FROM (SELECT p.post_id FROM Post p
