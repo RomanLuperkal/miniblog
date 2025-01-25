@@ -1,4 +1,4 @@
-package org.blog.configuration;
+package org.testconfiguration;
 
 import org.blog.mapper.UserMapper;
 import org.blog.mapper.UserMapperImpl;

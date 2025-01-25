@@ -1,6 +1,6 @@
 package org.blog.service;
 
-import org.blog.configuration.TagServiceTestConf;
+import org.testconfiguration.TagServiceTestConf;
 import org.blog.repository.TagRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

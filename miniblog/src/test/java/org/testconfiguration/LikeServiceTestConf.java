@@ -1,4 +1,4 @@
-package org.blog.configuration;
+package org.testconfiguration;
 
 import org.blog.repository.LikeRepository;
 import org.blog.service.LikeService;

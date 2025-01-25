@@ -1,7 +1,7 @@
 package org.blog.service;
 
 import org.blog.base.TestBase;
-import org.blog.configuration.CommentServiceTestConf;
+import org.testconfiguration.CommentServiceTestConf;
 import org.blog.dto.comment.CreateCommentDto;
 import org.blog.dto.comment.ResponseCommentDto;
 import org.blog.dto.comment.UpdateCommentDto;

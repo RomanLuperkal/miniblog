@@ -3,7 +3,7 @@ package org.blog.service;
 import jakarta.servlet.http.HttpSession;
 import lombok.SneakyThrows;
 import org.blog.base.TestBase;
-import org.blog.configuration.PostServiceTestConf;
+import org.testconfiguration.PostServiceTestConf;
 import org.blog.dto.post.*;
 import org.blog.dto.user.UserResponseDto;
 import org.blog.mapper.PostMapper;

@@ -1,7 +1,7 @@
 package org.blog.service;
 
 import org.blog.base.TestBase;
-import org.blog.configuration.LikeServiceTestConf;
+import org.testconfiguration.LikeServiceTestConf;
 import org.blog.model.Like;
 import org.blog.repository.LikeRepository;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,6 +1,6 @@
 package org.blog.service;
 
-import org.blog.configuration.UserServiceTestConf;
+import org.testconfiguration.UserServiceTestConf;
 import org.blog.dto.user.UserCreateDto;
 import org.blog.dto.user.UserResponseDto;
 import org.blog.model.User;
