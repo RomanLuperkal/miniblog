@@ -38,10 +38,10 @@ create table likes
 (
     post_id bigint not null
         constraint fk_post
-            references post,
+            references post on delete cascade,
     user_id bigint not null
         constraint fk_user
-            references usr,
+            references usr on delete cascade,
     primary key (post_id, user_id)
 );
 

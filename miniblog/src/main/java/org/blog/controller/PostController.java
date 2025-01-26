@@ -56,7 +56,7 @@ public class PostController {
             model.addAttribute("error", e.getMessage());
             return "post-list";
         }
-        return "redirect:/posts"; // После сохранения перенаправляем на список постов
+        return "redirect:/posts";
     }
 
     @GetMapping("{postId}")
@@ -100,7 +100,8 @@ public class PostController {
     @ResponseBody
     public ResponseEntity<LikeResponseDto> likePost(@PathVariable Long postId,  HttpSession session) {
         UserResponseDto user = (UserResponseDto) session.getAttribute("user");
-        return ResponseEntity.ok(likeService.likePost(postId, user.getUserId()));
+        LikeResponseDto likeResponseDto = likeService.likePost(postId, user.getUserId());
+        return ResponseEntity.ok(likeResponseDto);
     }
 
     @PostMapping(value = "{postId}", params = "_method=patch")

@@ -11,12 +11,12 @@
             <column name="post_id" type="bigint">
                 <constraints primaryKey="true" nullable="false"
                              foreignKeyName="fk_post" referencedTableName="post"
-                             referencedColumnNames="post_id" deleteCascade="false"/>
+                             referencedColumnNames="post_id" deleteCascade="true"/>
             </column>
             <column name="user_id" type="bigint">
                 <constraints primaryKey="true" nullable="false"
                              foreignKeyName="fk_user" referencedTableName="usr"
-                             referencedColumnNames="user_id" deleteCascade="false"/>
+                             referencedColumnNames="user_id" deleteCascade="true"/>
             </column>
         </createTable>
     </changeSet>

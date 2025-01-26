@@ -15,7 +15,6 @@ import org.blog.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.util.ResourceUtils;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.Files;
 import java.util.HashSet;
@@ -23,12 +22,16 @@ import java.util.Set;
 
 public abstract class TestBase {
 
-    private final static MultipartFile multipartFile = createMultipartFile("test_image.jpg");
+    private final static MockMultipartFile multipartFile = createMultipartFile("test_image.jpg");
 
     @Autowired(required = false)
     private CommentMapper commentMapper;
     @Autowired(required = false)
     private PostMapper postMapper;
+
+    protected MockMultipartFile getMultipartFile() {
+        return multipartFile;
+    }
 
     protected Like getLike() {
         Like like = new Like();
@@ -51,7 +54,7 @@ public abstract class TestBase {
         CreateCommentDto createCommentDto = new CreateCommentDto();
         createCommentDto.setOwnerId(1L);
         createCommentDto.setPostId(1L);
-        createCommentDto.setText("testText");
+        createCommentDto.setText("testCommentText");
         return createCommentDto;
     }
 
@@ -96,7 +99,7 @@ public abstract class TestBase {
         tag1.setPostId(1L);
         Tag tag2 = new Tag();
         tag2.setTagName("tag2");
-        tag2.setTagId(1L);
+        tag2.setTagId(2L);
         tag2.setPostId(1L);
 
         Comment comment = getComment();
