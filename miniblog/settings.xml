@@ -6,8 +6,8 @@
     <servers>
         <server>
             <id>TomcatServer</id>
-            <username>admin</username>
-            <password>1234</password>
+            <username>${env.tomcat_login}</username>
+            <password>${env.tomcat_password}</password>
         </server>
     </servers>
 
@@ -16,8 +16,7 @@
         <profile>
             <id>tomcat-deploy</id>
             <properties>
-
-                <tomcat.url>http://localhost:8081/manager/text</tomcat.url>
+                <tomcat.url>http://localhost:${env.tomcat_port}/manager/text</tomcat.url>
                 <tomcat.path>/myblog</tomcat.path>
             </properties>
         </profile>

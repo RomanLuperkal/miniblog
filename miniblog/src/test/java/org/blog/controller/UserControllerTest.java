@@ -2,6 +2,7 @@ package org.blog.controller;
 
 import lombok.SneakyThrows;
 import org.springframework.mock.web.MockHttpSession;
+import org.springframework.test.context.TestPropertySource;
 import org.testconfiguration.WebConfiguration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,6 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ActiveProfiles("test")
 @SpringJUnitWebConfig (classes = {WebConfiguration.class})
+@TestPropertySource("classpath:application-test.properties")
 public class UserControllerTest {
 
     @Autowired
