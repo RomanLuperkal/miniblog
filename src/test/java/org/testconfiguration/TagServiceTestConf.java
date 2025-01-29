@@ -1,8 +1,8 @@
 package org.testconfiguration;
 
-import org.blog.repository.TagRepository;
-import org.blog.service.TagService;
-import org.blog.service.impl.TagServiceImpl;
+import org.blog.miniblog.repository.TagRepository;
+import org.blog.miniblog.service.TagService;
+import org.blog.miniblog.service.impl.TagServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

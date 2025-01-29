@@ -1,10 +1,10 @@
 package org.testconfiguration;
 
-import org.blog.mapper.UserMapper;
-import org.blog.mapper.UserMapperImpl;
-import org.blog.repository.UserRepository;
-import org.blog.service.UserService;
-import org.blog.service.impl.UserServiceImpl;
+import org.blog.miniblog.mapper.UserMapper;
+import org.blog.miniblog.mapper.UserMapperImpl;
+import org.blog.miniblog.repository.UserRepository;
+import org.blog.miniblog.service.UserService;
+import org.blog.miniblog.service.impl.UserServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import static org.mockito.Mockito.mock;

@@ -1,10 +1,11 @@
 package org.testconfiguration;
 
-import org.blog.repository.LikeRepository;
-import org.blog.service.LikeService;
-import org.blog.service.PostService;
-import org.blog.service.UserService;
-import org.blog.service.impl.LikeServiceImpl;
+
+import org.blog.miniblog.repository.LikeRepository;
+import org.blog.miniblog.service.LikeService;
+import org.blog.miniblog.service.PostService;
+import org.blog.miniblog.service.UserService;
+import org.blog.miniblog.service.impl.LikeServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

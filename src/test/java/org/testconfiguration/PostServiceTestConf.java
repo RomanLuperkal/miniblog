@@ -1,10 +1,11 @@
 package org.testconfiguration;
 
-import org.blog.mapper.*;
-import org.blog.repository.PostRepository;
-import org.blog.service.PostService;
-import org.blog.service.TagService;
-import org.blog.service.impl.PostServiceImpl;
+
+import org.blog.miniblog.mapper.*;
+import org.blog.miniblog.repository.PostRepository;
+import org.blog.miniblog.service.PostService;
+import org.blog.miniblog.service.TagService;
+import org.blog.miniblog.service.impl.PostServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

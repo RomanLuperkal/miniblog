@@ -1,10 +1,10 @@
 package org.testconfiguration;
 
-import org.blog.mapper.CommentMapper;
-import org.blog.mapper.CommentMapperImpl;
-import org.blog.repository.CommentRepository;
-import org.blog.service.CommentService;
-import org.blog.service.impl.CommentServiceImpl;
+import org.blog.miniblog.service.CommentService;
+import org.blog.miniblog.service.impl.CommentServiceImpl;
+import org.blog.miniblog.mapper.CommentMapper;
+import org.blog.miniblog.mapper.CommentMapperImpl;
+import org.blog.miniblog.repository.CommentRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
