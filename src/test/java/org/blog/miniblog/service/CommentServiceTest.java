@@ -6,13 +6,12 @@ import org.blog.miniblog.dto.comment.ResponseCommentDto;
 import org.blog.miniblog.dto.comment.UpdateCommentDto;
 import org.blog.miniblog.model.Comment;
 import org.blog.miniblog.repository.CommentRepository;
-import org.testconfiguration.CommentServiceTestConf;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
@@ -23,18 +22,13 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ActiveProfiles("test")
-@SpringJUnitConfig(classes = CommentServiceTestConf.class)
+@SpringBootTest
 public class CommentServiceTest extends TestBase {
     @Autowired
     private CommentService commentService;
 
-    @Autowired
+    @MockBean
     private CommentRepository commentRepository;
-
-    @BeforeEach
-    public void resetMocks() {
-        reset(commentRepository);
-    }
 
     @Test
     public void testAddComment() {

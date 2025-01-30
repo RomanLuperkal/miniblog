@@ -15,20 +15,16 @@ import org.blog.miniblog.model.Tag;
 import org.blog.miniblog.repository.CommentRepository;
 import org.blog.miniblog.repository.PostRepository;
 import org.blog.miniblog.repository.TagRepository;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-import org.testconfiguration.WebConfiguration;
 
 import javax.sql.DataSource;
 import java.util.Optional;
@@ -38,8 +34,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ActiveProfiles("test")
-@SpringJUnitWebConfig(classes = {WebConfiguration.class})
-@TestPropertySource("classpath:application-test.properties")
+@SpringBootTest
+@AutoConfigureMockMvc
 public class PostControllerTest extends TestBase {
     @Autowired
     private DataSource dataSource;
@@ -47,6 +43,7 @@ public class PostControllerTest extends TestBase {
     @Autowired
     private WebApplicationContext webApplicationContext;
 
+    @Autowired
     private MockMvc mockMvc;
 
     @Autowired
@@ -69,18 +66,6 @@ public class PostControllerTest extends TestBase {
         user.setFirstName("Ivan");
         user.setLastName("Ivanov");
         session.setAttribute("user", user);
-    }
-
-    @BeforeEach
-    void setUp() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-    }
-
-    @AfterEach
-    void cleanRepository() {
-        postRepository.deleteAll();
-        tagRepository.deleteAll();
-        commentRepository.deleteAll();
     }
 
     @Test

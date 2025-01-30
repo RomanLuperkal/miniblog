@@ -3,6 +3,8 @@ package org.blog.miniblog.service;
 import org.blog.miniblog.base.TestBase;
 import org.blog.miniblog.model.Like;
 import org.blog.miniblog.repository.LikeRepository;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.testconfiguration.LikeServiceTestConf;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,24 +21,19 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ActiveProfiles("test")
-@SpringJUnitConfig(classes = LikeServiceTestConf.class)
+@SpringBootTest
 public class LikeServiceTest extends TestBase {
     @Autowired
     private LikeService likeService;
 
-    @Autowired
+    @MockBean
     private PostService postService;
 
-    @Autowired
+    @MockBean
     private UserService userService;
 
-    @Autowired
+    @MockBean
     private LikeRepository likeRepository;
-
-    @BeforeEach
-    public void resetMocks() {
-        reset(likeRepository, postService, userService);
-    }
 
     @Test
     public void deleteLikeTest() {

@@ -4,13 +4,12 @@ import org.blog.miniblog.dto.user.UserCreateDto;
 import org.blog.miniblog.dto.user.UserResponseDto;
 import org.blog.miniblog.model.User;
 import org.blog.miniblog.repository.UserRepository;
-import org.testconfiguration.UserServiceTestConf;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
@@ -19,19 +18,14 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ActiveProfiles("test")
-@SpringJUnitConfig(classes = UserServiceTestConf.class)
+@SpringBootTest
 public class UserServiceTest {
 
-    @Autowired
+    @MockBean
     private UserRepository userRepository;
 
     @Autowired
     private UserService userService;
-
-    @BeforeEach
-    public void resetMocks() {
-        reset(userRepository);
-    }
 
     @Test
     public void addUserTest() {

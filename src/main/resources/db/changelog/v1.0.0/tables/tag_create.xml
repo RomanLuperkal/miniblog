@@ -10,7 +10,7 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="post_id" type="BIGINT">
-                <constraints nullable="false" foreignKeyName="fk_comment_user"
+                <constraints nullable="false" foreignKeyName="fk_tag_post"
                              referencedTableName="post" referencedColumnNames="post_id"
                              deleteCascade="true"/>
             </column>

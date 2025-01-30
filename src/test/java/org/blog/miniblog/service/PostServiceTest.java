@@ -8,17 +8,17 @@ import org.blog.miniblog.dto.user.UserResponseDto;
 import org.blog.miniblog.mapper.PostMapper;
 import org.blog.miniblog.model.Post;
 import org.blog.miniblog.repository.PostRepository;
-import org.testconfiguration.PostServiceTestConf;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -32,19 +32,16 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ActiveProfiles("test")
-@SpringJUnitConfig(classes = PostServiceTestConf.class)
+@SpringBootTest
 public class PostServiceTest extends TestBase {
 
     @Autowired
     private PostService postService;
 
-    @Autowired
+    @MockBean
     private PostRepository postRepository;
 
-    @Autowired
-    private TagService tagService;
-
-    @Autowired
+    @SpyBean
     private PostMapper postMapper;
 
     private static HttpSession session;
@@ -57,12 +54,6 @@ public class PostServiceTest extends TestBase {
 
         session = new MockHttpSession();
         session.setAttribute("user", userResponseDto);
-
-    }
-
-    @BeforeEach
-    public void resetMocks() {
-        reset(postRepository, tagService);
     }
 
     @Test

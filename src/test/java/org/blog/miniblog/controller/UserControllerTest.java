@@ -1,6 +1,8 @@
 package org.blog.miniblog.controller;
 
 import lombok.SneakyThrows;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.TestPropertySource;
 import org.testconfiguration.WebConfiguration;
@@ -26,22 +28,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @ActiveProfiles("test")
-@SpringJUnitWebConfig (classes = {WebConfiguration.class})
-@TestPropertySource("classpath:application-test.properties")
+@SpringBootTest
+@AutoConfigureMockMvc
 public class UserControllerTest {
 
     @Autowired
     private DataSource dataSource;
 
     @Autowired
-    private WebApplicationContext webApplicationContext;
-
     private MockMvc mockMvc;
 
-    @BeforeEach
-    void setUp() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-        }
+
 
     @Test
     @SneakyThrows
