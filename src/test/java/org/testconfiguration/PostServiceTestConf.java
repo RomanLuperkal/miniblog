@@ -26,6 +26,7 @@ public class PostServiceTestConf {
     }
 
     @Bean
+
     public TagMapper getTagMapper() {
         return new TagMapperImpl();
     }
